@@ -264,8 +264,12 @@
 .g-pod .slot .who{font-size:17px;font-weight:800;margin-top:2px;overflow:hidden;
   text-overflow:ellipsis;white-space:nowrap}
 .g-pod .slot .amt{font-size:13.5px;color:var(--ink);font-variant-numeric:tabular-nums}
-.g-pod .slot.first{border-color:rgba(255,215,94,.55);box-shadow:0 0 14px rgba(255,215,94,.12)}
-.g-pod .slot.first .who,.g-pod .slot.first .rk{color:var(--gold)}
+.g-pod .slot.first{border-color:rgba(160,220,255,.75);box-shadow:0 0 14px rgba(140,210,255,.28)}
+.g-pod .slot.first .who,.g-pod .slot.first .rk{color:#bfe7ff}
+.g-pod .slot.second{border-color:rgba(255,215,94,.55);box-shadow:0 0 14px rgba(255,215,94,.12)}
+.g-pod .slot.second .who,.g-pod .slot.second .rk{color:var(--gold)}
+.g-pod .slot.third{border-color:rgba(232,238,242,.6);box-shadow:0 0 14px rgba(210,222,230,.16)}
+.g-pod .slot.third .who,.g-pod .slot.third .rk{color:#eef3f5}
 .g-tablewrap{max-height:430px;overflow-y:auto;scrollbar-width:thin;
   scrollbar-color:var(--ice-dim) #0d141b}
 .g-tablewrap::-webkit-scrollbar{width:8px}
@@ -273,7 +277,18 @@
 table.gtab{width:100%;border-collapse:collapse;font-size:14px}
 .gtab td,.gtab th{padding:4px 6px;text-align:left;font-variant-numeric:tabular-nums}
 .gtab th{color:var(--dim);font-size:11px;letter-spacing:1px}
-.gtab tr.top1 td{color:var(--gold);font-weight:700}
+/* Podium finishes - the Warlord's order, Nov 11, 2026 (corrected):
+   #1 DIAMOND - #2 24K GOLD - #3 PLATINUM. Supersedes '#1 row is gold'.
+   Finishes paint on the TR; the win/loss flash animations run on the
+   TDs above them, so flashes read at full strength over the metal. */
+.gtab tr.pod1{background:radial-gradient(circle at 12% 22%,rgba(255,255,255,.95) 0 1.6px,rgba(255,255,255,0) 3px),radial-gradient(circle at 33% 74%,rgba(255,255,255,.85) 0 1.2px,rgba(255,255,255,0) 2.6px),radial-gradient(circle at 57% 28%,rgba(255,255,255,.92) 0 1.8px,rgba(255,255,255,0) 3.2px),radial-gradient(circle at 78% 66%,rgba(255,255,255,.82) 0 1.3px,rgba(255,255,255,0) 2.8px),radial-gradient(circle at 93% 24%,rgba(255,255,255,.9) 0 1.5px,rgba(255,255,255,0) 3px),linear-gradient(112deg,#9fd3f7 0%,#eaf8ff 24%,#bfe7ff 41%,#ffffff 54%,#d8f1ff 68%,#a9d6f8 84%,#eaf8ff 100%)}
+.gtab tr.pod1 td{color:#0a2e44;font-weight:700}
+.gtab tr.pod2{background:linear-gradient(105deg,#7a4d00 0%,#c8912a 20%,#f6c453 38%,#ffe89a 50%,#e9b83a 62%,#a86f00 82%,#7a4d00 100%)}
+.gtab tr.pod2 td{color:#2a1a00;font-weight:700}
+.gtab tr.pod3{background:linear-gradient(105deg,#7e868c 0%,#cfd6da 22%,#f7fafb 40%,#aeb7bc 58%,#e9edee 76%,#8b949a 100%)}
+.gtab tr.pod3 td{color:#1d2327;font-weight:700}
+.g-fin{font-size:9px;font-weight:800;letter-spacing:1.5px;padding:1px 6px;border-radius:4px;margin-left:7px;vertical-align:2px;background:rgba(6,18,28,.72);white-space:nowrap}
+.g-fin-d{color:#cfeeff}.g-fin-g{color:#ffd75e}.g-fin-p{color:#f2f5f7}
 .g-pos{color:var(--green)} .g-neg{color:var(--red)}
 .g-side-long{color:var(--green);font-weight:700}
 .g-side-short{color:var(--red);font-weight:700}
@@ -491,9 +506,9 @@ select#gLevSel{background:var(--panel2);color:var(--ink);border:1px solid var(--
       <div class="g-panel">
         <h3>🏆 THE PODIUM — TOP OF THE BOOKS</h3>
         <div class="g-pod" id="gPodium">
-          <div class="slot first"><div class="rk">👑 #1</div><div class="who">—</div><div class="amt">—</div></div>
-          <div class="slot"><div class="rk">#2</div><div class="who">—</div><div class="amt">—</div></div>
-          <div class="slot"><div class="rk">#3</div><div class="who">—</div><div class="amt">—</div></div>
+          <div class="slot first"><div class="rk">👑 #1 — DIAMOND</div><div class="who">—</div><div class="amt">—</div></div>
+          <div class="slot second"><div class="rk">#2 — 24K GOLD</div><div class="who">—</div><div class="amt">—</div></div>
+          <div class="slot third"><div class="rk">#3 — PLATINUM</div><div class="who">—</div><div class="amt">—</div></div>
         </div>
         <h3>📚 LEADERBOARD — THE BOOKS</h3>
         <div class="g-tablewrap">
@@ -1543,8 +1558,9 @@ function gRenderBooks(){
       ? gFmtInt(row.balance) + ' sats · ' + row.wins + 'W–' + row.losses + 'L' : '—';
   }
   $('gBoard').innerHTML = lb.map(function(row, i){
-    return '<tr class="' + (i === 0 ? 'top1' : '') + gFlashCls(row.display) + '"><td>' + (i + 1)
+    return '<tr class="' + (i === 0 ? 'pod1' : i === 1 ? 'pod2' : i === 2 ? 'pod3' : '') + gFlashCls(row.display) + '"><td>' + (i + 1)
       + '</td><td>' + gEsc(row.display)
+      + (i === 0 ? '<span class="g-fin g-fin-d">◆ DIAMOND</span>' : i === 1 ? '<span class="g-fin g-fin-g">◆ 24K GOLD</span>' : i === 2 ? '<span class="g-fin g-fin-p">◆ PLATINUM</span>' : '')
       + '<span class="g-badges">' + (row.badges || []).join('') + '</span>'
       + (row.title ? '<span class="g-ptitle">' + gEsc(row.title) + '</span>' : '')
       + '</td><td>' + gFmtInt(row.balance) + ' sats</td>'
