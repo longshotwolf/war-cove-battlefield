@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- BFBUILD 2026-11-10 full-motion + Newhedge tools -->
+<!-- BFBUILD 2026-11-10 v2 full-motion + LTC live book + Newhedge BTC board -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -55,6 +55,12 @@
         box-shadow:0 0 6px #fff}
   .read{margin-top:10px;font-size:13.5px;line-height:1.55;background:#100e0c;border-left:3px solid var(--gold);
         padding:8px 10px;border-radius:0 4px 4px 0}
+  /* ------- LTC live book ------- */
+  .ltools{margin-top:18px;border:1px solid var(--line);border-top:3px solid var(--gold);
+        background:linear-gradient(180deg,#171410,var(--panel));border-radius:6px;padding:12px 14px}
+  .ltools h2{margin:0;font-size:16px;letter-spacing:2px;color:var(--gold)}
+  .ltools .bsub{color:var(--dim);font-size:12px;margin-top:2px}
+  .wallalert{margin-top:8px;font-size:13px;color:var(--amber);font-weight:bold;min-height:18px;letter-spacing:.3px}
   /* ------- BTC battlefield tools ------- */
   .btools{margin-top:18px;border:1px solid var(--line);border-top:3px solid var(--holo);
         background:linear-gradient(180deg,#12161a,var(--panel));border-radius:6px;padding:12px 14px}
@@ -110,7 +116,7 @@
 <header>
   <h1>⚔ WAR COVE BATTLEFIELD</h1>
   <span class="live"><span class="dot"></span>LIVE</span>
-  <span class="sub">two live Heikin-Ashi flanks in full motion — candles adjust as the tape moves · BTC battlefield tools below, certified against the Bitunix tape</span>
+  <span class="sub">two live Heikin-Ashi flanks in full motion — candles adjust as the tape moves · LTC leads below with its live book and 6H win bar · BTC board under it, certified against the Bitunix tape</span>
   <span style="flex:1"></span>
   <button id="refreshBtn">↻ REFRESH</button>
 </header>
@@ -120,9 +126,46 @@
   <section class="flank" id="flankR"></section>
 </div>
 
+<section class="ltools" id="ltools">
+  <h2>Ł LTC BATTLEFIELD — LIVE BOOK <span class="live" style="margin-left:6px"><span class="dot"></span>LIVE</span></h2>
+  <div class="bsub">Litecoin — the home coin leads this page. The win bar rides the live LTC 6H battle range (OKX tape); walls, liquidity and depth run off the live OKX LTC/USDT spot book, updating as orders stack and pull — resistance shows itself BEFORE price gets there. <span class="age" id="ltcAge"></span></div>
+
+  <div class="winbar">
+    <div class="labels">
+      <span class="bears">← BEARS WIN <b id="lwbBears">—</b></span>
+      <span class="midlab" id="lwbLabel">—</span>
+      <span class="bulls"><b id="lwbBulls">—</b> BULLS WIN →</span>
+    </div>
+    <div class="track"><div class="fillb" id="lwbFillB"></div><div class="fillg" id="lwbFillG"></div><div class="pos" id="lwbPos" style="left:50%"></div></div>
+  </div>
+
+  <div class="bgrid">
+    <div class="panel" id="pLtcLiq">
+      <h3>LTC LIQUIDITY — LIVE OKX SPOT BOOK (±1%)</h3>
+      <div class="rowline"><span class="k">BID LIQUIDITY</span><span><b class="big" style="color:var(--green);font-size:21px" id="ltcBid">—</b> <span class="delta" id="ltcBidD" style="display:none"></span></span></div>
+      <div class="rowline"><span class="k">ASK LIQUIDITY</span><span><b class="big" style="color:var(--red);font-size:21px" id="ltcAsk">—</b> <span class="delta" id="ltcAskD" style="display:none"></span></span></div>
+      <div class="splitbar"><div class="b" id="ltcBarG" style="width:50%"></div><div class="a" id="ltcBarR" style="width:50%"></div></div>
+      <div class="rowline"><span class="k">Biggest bid wall</span><b id="ltcWallBid">—</b></div>
+      <div class="rowline"><span class="k">Biggest ask wall (resistance)</span><b id="ltcWallAsk">—</b></div>
+      <div class="rowline"><span class="k">BID RESERVES (behind the wall)</span><b id="ltcResBid">—</b></div>
+      <div class="rowline"><span class="k">ASK RESERVES (behind the wall)</span><b id="ltcResAsk">—</b></div>
+      <div class="wallalert" id="ltcWallAlert"></div>
+      <div class="age">deltas vs 60 seconds ago — watch the walls thicken and thin in real time</div>
+    </div>
+
+    <div class="panel" id="pLtcDepth">
+      <h3>LTC ORDER BOOK DEPTH — LIVE</h3>
+      <canvas class="depth" id="ltcDepthCv" height="190"></canvas>
+      <div class="age">cumulative bid (green) vs ask (red) $ by price · animates as orders stack and pull · biggest walls marked</div>
+    </div>
+  </div>
+
+  <div class="read btread" id="ltcRead">LTC battlefield read: —</div>
+</section>
+
 <section class="btools" id="btools">
-  <h2>BTC BATTLEFIELD — NEWHEDGE TOOLS <span class="badge ok" id="btBadge">CERTIFIED</span></h2>
-  <div class="bsub">Bitcoin only — the market-wide battle board. Figures read off the same certified Newhedge battlefield source the Cove's battlefield watch uses, checked against the live Bitunix tape. <span class="age" id="btAge"></span></div>
+  <h2>BTC BATTLEFIELD — NEWHEDGE BOARD <span class="badge ok" id="btBadge">CERTIFIED</span></h2>
+  <div class="bsub">Bitcoin board — the market-wide read, labeled BTC because its certified source is a Bitcoin board. Figures read off the same certified Newhedge battlefield source the Cove's battlefield watch uses, checked against the live Bitunix tape. <span class="age" id="btAge"></span></div>
 
   <div class="winbar">
     <div class="labels">
@@ -182,7 +225,8 @@
 
 <footer>
   Flank candles: OKX live tape, Heikin-Ashi only — drag to pan history, wheel / pinch to zoom, drag the price axis to stretch, double-click or ⟲ LIVE VIEW to snap back.
-  Funding &amp; open interest: OKX. BTC tools: Newhedge public battlefield (the Cove watch's certified source) via the War Cove collector — every read is checked against the Bitunix tape; a mismatch or a dead feed shows STALE, never a made-up number.
+  Funding &amp; open interest: OKX. LTC battlefield: live OKX LTC/USDT spot book (books stream, sequence-checked, REST resync each minute) + the LTC 6H tape range — walls build and pull in real time.
+  BTC board: Newhedge public battlefield (the Cove watch's certified source) via the War Cove collector — every read is checked against the Bitunix tape; a mismatch or a dead feed shows STALE, never a made-up number. BTC figures are never dressed as LTC.
 </footer>
 
 <script>
@@ -214,15 +258,25 @@ function calcHA(raw){
 
 let ws=null, wsRetry=1000;
 const charts=[];
+const subCount=new Map(); // channel|instId -> refcount (flanks + LTC section share one socket)
 function wsSend(o){ if(ws&&ws.readyState===1) ws.send(JSON.stringify(o)); }
+function sub(channel,instId){ const k=channel+'|'+instId; const n=(subCount.get(k)||0)+1; subCount.set(k,n);
+  if(n===1) wsSend({op:'subscribe',args:[{channel,instId}]}); }
+function unsub(channel,instId){ const k=channel+'|'+instId; const n=(subCount.get(k)||0)-1;
+  if(n<=0){ subCount.delete(k); wsSend({op:'unsubscribe',args:[{channel,instId}]}); } else subCount.set(k,n); }
 function connectWS(){
   ws=new WebSocket('wss://ws.okx.com:8443/ws/v5/public');
   ws.onopen=()=>{ wsRetry=1000;
-    for(const ch of charts){ wsSend({op:'subscribe',args:[{channel:'tickers',instId:ch.inst}]});
-      wsSend({op:'subscribe',args:[{channel:'candle'+ch.bar,instId:ch.inst}]}); } };
+    for(const k of subCount.keys()){ const parts=k.split('|');
+      wsSend({op:'subscribe',args:[{channel:parts[0],instId:parts[1]}]}); } };
   ws.onmessage=ev=>{ let m; try{ m=JSON.parse(ev.data); }catch(e){ return; }
     if(!m.data||!m.arg) return;
     const arg=m.arg;
+    if(arg.channel==='books'&&arg.instId==='LTC-USDT'){ bookMessage(m); return; }
+    if(arg.instId==='LTC-USDT'&&arg.channel==='tickers'){ const t=m.data[0];
+      if(t&&t.last){ ltcTape.price=parseFloat(t.last); ltcDirty=true; } }
+    if(arg.instId==='LTC-USDT'&&arg.channel==='candle6H'){ const row=m.data[0];
+      if(row){ ltcTape.hi6=parseFloat(row[2]); ltcTape.lo6=parseFloat(row[3]); ltcDirty=true; } }
     for(const ch of charts){
       if(arg.instId!==ch.inst) continue;
       if(arg.channel==='tickers'){ const t=m.data[0];
@@ -307,16 +361,16 @@ function snapLive(ch){ ch.back=0; ch.yOff=0; ch.yZoom=1; requestDraw(ch); }
 function requestDraw(ch){ ch.dirty=true; if(ch.liveBtn) ch.liveBtn.classList.toggle('held',held(ch)); }
 function switchCoin(ch,coin){
   const old=ch.inst;
-  wsSend({op:'unsubscribe',args:[{channel:'tickers',instId:old},{channel:'candle'+ch.bar,instId:old}]});
+  unsub('tickers',old); unsub('candle'+ch.bar,old);
   ch.inst=coin+'-USDT'; ch.raw=[]; ch.ha=[]; ch.price=null; snapLive(ch);
-  wsSend({op:'subscribe',args:[{channel:'tickers',instId:ch.inst},{channel:'candle'+ch.bar,instId:ch.inst}]});
+  sub('tickers',ch.inst); sub('candle'+ch.bar,ch.inst);
   loadHistory(ch,false); fetchStats(ch);
 }
 function switchBar(ch,bar){
-  wsSend({op:'unsubscribe',args:[{channel:'candle'+ch.bar,instId:ch.inst}]});
+  unsub('candle'+ch.bar,ch.inst);
   ch.bar=bar; ch.raw=[]; ch.ha=[]; snapLive(ch);
   ch.root.querySelectorAll('.tfbar button[data-bar]').forEach(b=>b.classList.toggle('on',b.dataset.bar===bar));
-  wsSend({op:'subscribe',args:[{channel:'candle'+ch.bar,instId:ch.inst}]});
+  sub('candle'+ch.bar,ch.inst);
   loadHistory(ch,false);
 }
 function maybePage(ch){
@@ -434,11 +488,176 @@ function drawChart(ch){
 
 charts.push(makeChart('flankL','LTC-USDT'));
 charts.push(makeChart('flankR','ETH-USDT'));
+charts.forEach(ch=>{ sub('tickers',ch.inst); sub('candle'+ch.bar,ch.inst); });
 connectWS();
 charts.forEach(ch=>{ loadHistory(ch,false); fetchStats(ch); });
 setInterval(()=>charts.forEach(fetchStats),30000);
 (function loop(){ for(const ch of charts){ if(ch.dirty||ch.back===0){ drawChart(ch); ch.dirty=false; } }
   requestAnimationFrame(loop); })();
+
+/* ================= LTC battlefield: live OKX book =================
+   The home coin leads: win bar off the live LTC 6H tape range; walls,
+   liquidity, reserves and depth off the live OKX LTC/USDT spot book
+   (books channel, seqId-chained, REST resync every 60s). Everything
+   recomputes as orders stack and pull — nothing here is a snapshot. */
+const ltcTape={price:null,hi6:null,lo6:null};
+let ltcDirty=true;
+const ltcBook={bids:new Map(),asks:new Map(),seq:null,ok:false,lastMsg:0,calc:null,
+               dispB:null,dispA:null,hist:[],lastSample:0,_ct:0};
+sub('tickers','LTC-USDT'); sub('candle6H','LTC-USDT'); sub('books','LTC-USDT');
+
+function bookMessage(m){
+  const d=m.data&&m.data[0]; if(!d)return;
+  if(m.action==='snapshot'){
+    ltcBook.bids.clear(); ltcBook.asks.clear();
+    for(const r of d.bids) ltcBook.bids.set(r[0],[parseFloat(r[0]),parseFloat(r[1])]);
+    for(const r of d.asks) ltcBook.asks.set(r[0],[parseFloat(r[0]),parseFloat(r[1])]);
+    ltcBook.seq=d.seqId; ltcBook.ok=true; ltcBook.lastMsg=Date.now(); bookCalc();
+  } else {
+    if(ltcBook.seq!=null&&d.prevSeqId!=null&&d.prevSeqId!==ltcBook.seq){ resyncBook(); return; }
+    ltcBook.seq=d.seqId;
+    for(const r of d.bids){ if(parseFloat(r[1])===0)ltcBook.bids.delete(r[0]);
+      else ltcBook.bids.set(r[0],[parseFloat(r[0]),parseFloat(r[1])]); }
+    for(const r of d.asks){ if(parseFloat(r[1])===0)ltcBook.asks.delete(r[0]);
+      else ltcBook.asks.set(r[0],[parseFloat(r[0]),parseFloat(r[1])]); }
+    ltcBook.lastMsg=Date.now();
+    if(Date.now()-ltcBook._ct>180){ ltcBook._ct=Date.now(); bookCalc(); }
+  }
+}
+async function resyncBook(){
+  try{ const r=await fetch(REST+'/market/books?instId=LTC-USDT&sz=400'); const j=await r.json();
+    const d=j.data&&j.data[0]; if(!d)return;
+    ltcBook.bids.clear(); ltcBook.asks.clear();
+    for(const row of d.bids) ltcBook.bids.set(row[0],[parseFloat(row[0]),parseFloat(row[1])]);
+    for(const row of d.asks) ltcBook.asks.set(row[0],[parseFloat(row[0]),parseFloat(row[1])]);
+    ltcBook.seq=d.seqId; ltcBook.ok=true; ltcBook.lastMsg=Date.now(); bookCalc();
+  }catch(e){}
+}
+setInterval(resyncBook,60000);
+
+function bookCalc(){
+  const bids=[...ltcBook.bids.values()].sort((a,b)=>b[0]-a[0]);
+  const asks=[...ltcBook.asks.values()].sort((a,b)=>a[0]-b[0]);
+  if(!bids.length||!asks.length)return;
+  const mid=(bids[0][0]+asks[0][0])/2, lo=mid*0.99, hi=mid*1.01;
+  function side(rows,isBid){
+    let cum=0; const arr=[]; let wall=null, wallCum=0;
+    for(const row of rows){ const px=row[0];
+      if(isBid?px<lo:px>hi) break;
+      const n=px*row[1]; cum+=n; arr.push([px,cum]);
+      if(!wall||n>wall.n){ wall={px,n}; wallCum=cum; } }
+    return {arr,total:cum,wall,reserves:wall?cum-wallCum:null};
+  }
+  const B=side(bids,true), A=side(asks,false);
+  ltcBook.calc={mid,lo,hi,B,A,ts:Date.now()};
+  const now=Date.now();
+  if(now-ltcBook.lastSample>=5000){ ltcBook.lastSample=now;
+    ltcBook.hist.push({t:now,bid:B.total,ask:A.total,bw:B.wall?B.wall.n:0,aw:A.wall?A.wall.n:0});
+    while(ltcBook.hist.length>40)ltcBook.hist.shift(); }
+  ltcDirty=true;
+}
+function sample60(){
+  const now=Date.now(); let best=null,bd=1e9;
+  for(const s of ltcBook.hist){ const age=now-s.t;
+    if(age>=40000&&Math.abs(age-60000)<bd){ bd=Math.abs(age-60000); best=s; } }
+  return best;
+}
+function renderLTC(){
+  const px=ltcTape.price;
+  if(px&&ltcTape.hi6&&ltcTape.lo6&&ltcTape.hi6>ltcTape.lo6){
+    const prog=Math.max(0,Math.min(100,(px-ltcTape.lo6)/(ltcTape.hi6-ltcTape.lo6)*100));
+    $('lwbBears').textContent='$'+fmtP(ltcTape.lo6);
+    $('lwbBulls').textContent='$'+fmtP(ltcTape.hi6);
+    $('lwbLabel').textContent='LTC 6H BATTLE · price $'+fmtP(px)+' · bulls $'+fmtP(ltcTape.hi6-px)
+      +' to the high · bears $'+fmtP(px-ltcTape.lo6)+' to the low';
+    $('lwbPos').style.left='calc('+prog.toFixed(1)+'% - 2px)';
+    $('lwbFillB').style.width=(100-prog).toFixed(1)+'%';
+    $('lwbFillG').style.width=prog.toFixed(1)+'%';
+  }
+  $('ltcAge').textContent=ltcBook.ok
+    ? 'book live · updated '+ageStr(ltcBook.lastMsg)+' · OKX LTC/USDT spot book'
+    : 'book — waiting for the OKX stream…';
+  const c=ltcBook.calc; if(!c)return;
+  $('ltcBid').textContent=fmt$(c.B.total);
+  $('ltcAsk').textContent=fmt$(c.A.total);
+  const s60=sample60();
+  const dBid=s60&&s60.bid?(c.B.total-s60.bid)/s60.bid*100:null;
+  const dAsk=s60&&s60.ask?(c.A.total-s60.ask)/s60.ask*100:null;
+  setDelta($('ltcBidD'),dBid); if(dBid!=null)$('ltcBidD').textContent=(dBid>=0?'▲ +':'▼ ')+dBid.toFixed(2)+'% vs 60s ago';
+  setDelta($('ltcAskD'),dAsk); if(dAsk!=null)$('ltcAskD').textContent=(dAsk>=0?'▲ +':'▼ ')+dAsk.toFixed(2)+'% vs 60s ago';
+  const tot=c.B.total+c.A.total;
+  if(tot>0){ $('ltcBarG').style.width=(c.B.total/tot*100)+'%'; $('ltcBarR').style.width=(c.A.total/tot*100)+'%'; }
+  const wallTxt=(w,isAsk)=>{ if(!w)return '—';
+    const dist=(w.px-c.mid)/c.mid*100;
+    return fmt$(w.n)+' @ $'+fmtP(w.px)+' ('+(dist>=0?'+':'')+dist.toFixed(2)+'% from price)'; };
+  $('ltcWallBid').textContent=wallTxt(c.B.wall,false);
+  $('ltcWallAsk').textContent=wallTxt(c.A.wall,true);
+  $('ltcResBid').textContent=c.B.reserves!=null?'≈ '+fmt$(c.B.reserves):'—';
+  $('ltcResAsk').textContent=c.A.reserves!=null?'≈ '+fmt$(c.A.reserves):'—';
+  let alert='';
+  if(s60){
+    if(c.A.wall&&s60.aw>0&&c.A.wall.n>s60.aw*1.3&&c.A.wall.n>=5000)
+      alert='⚠ RESISTANCE BUILDING — ask wall now '+fmt$(c.A.wall.n)+' @ $'+fmtP(c.A.wall.px)
+        +' (+'+Math.round((c.A.wall.n/s60.aw-1)*100)+'% in ~60s), still above price';
+    else if(c.B.wall&&s60.bw>0&&c.B.wall.n>s60.bw*1.3&&c.B.wall.n>=5000)
+      alert='⚠ SUPPORT BUILDING — bid wall now '+fmt$(c.B.wall.n)+' @ $'+fmtP(c.B.wall.px)
+        +' (+'+Math.round((c.B.wall.n/s60.bw-1)*100)+'% in ~60s)';
+    else if(dAsk!=null&&dAsk>=20) alert='⚠ ASK SIDE THICKENING — ask liquidity +'+dAsk.toFixed(1)+'% in ~60s';
+    else if(dBid!=null&&dBid>=20) alert='⚠ BID SIDE THICKENING — bid liquidity +'+dBid.toFixed(1)+'% in ~60s';
+  }
+  $('ltcWallAlert').textContent=alert;
+  const prog=(px&&ltcTape.hi6&&ltcTape.lo6)?(px-ltcTape.lo6)/(ltcTape.hi6-ltcTape.lo6)*100:null;
+  $('ltcRead').innerHTML='<b>LTC battlefield read:</b> '
+    +(px?('live $'+fmtP(px)+(prog!=null?(' — '+prog.toFixed(0)+'% across the 6H battle range $'+fmtP(ltcTape.lo6)+'–$'+fmtP(ltcTape.hi6)+(prog>=50?' (GREEN pressing the high).':' (RED pressing the low).')):'.')):'')
+    +' Book within ±1%: bid '+fmt$(c.B.total)+' vs ask '+fmt$(c.A.total)+'. '
+    +(c.A.wall?('Biggest resistance: '+fmt$(c.A.wall.n)+' @ $'+fmtP(c.A.wall.px)+'. '):'')
+    +(c.B.wall?('Biggest support: '+fmt$(c.B.wall.n)+' @ $'+fmtP(c.B.wall.px)+'.'):'')
+    +(alert?' '+esc(alert):'');
+}
+function drawDepthInto(cv,bids,asks,mid,bidWall,askWall){
+  if(!cv||!cv.clientWidth)return;
+  const dpr=window.devicePixelRatio||1;
+  const W=cv.clientWidth,H=cv.clientHeight;
+  if(cv.width!==Math.round(W*dpr)){ cv.width=Math.round(W*dpr); cv.height=Math.round(H*dpr); }
+  const x=cv.getContext('2d'); x.setTransform(dpr,0,0,dpr,0,0);
+  x.clearRect(0,0,W,H);
+  if(!bids.length||!asks.length){ x.fillStyle='#9a958a'; x.font='12px Georgia';
+    x.fillText('depth — waiting for the book',12,20); return; }
+  const lo=bids[bids.length-1][0], hi=asks[asks.length-1][0];
+  const maxC=Math.max(bids[bids.length-1][1],asks[asks.length-1][1]);
+  const xOf=p=>((p-lo)/(hi-lo))*W, yOf=c2=>H-14-(c2/maxC)*(H-30);
+  const area=(rows,col,fill)=>{ x.beginPath();
+    rows.forEach((r,i)=>{ const px2=xOf(r[0]),py=yOf(r[1]); i?x.lineTo(px2,py):x.moveTo(px2,py); });
+    x.strokeStyle=col; x.lineWidth=1.6; x.stroke();
+    x.lineTo(xOf(rows[rows.length-1][0]),H-14); x.lineTo(xOf(rows[0][0]),H-14); x.closePath();
+    x.fillStyle=fill; x.fill(); };
+  area(bids,'#37d67a','rgba(55,214,122,.20)');
+  area(asks,'#ff5252','rgba(255,82,82,.20)');
+  if(mid){ const mx=xOf(mid); x.strokeStyle='rgba(232,225,216,.6)'; x.setLineDash([4,4]);
+    x.beginPath(); x.moveTo(mx,6); x.lineTo(mx,H-14); x.stroke(); x.setLineDash([]);
+    x.fillStyle='#e8e4d8'; x.font='bold 10px Georgia'; x.fillText('$'+fmtP(mid),Math.min(W-70,mx+5),14); }
+  const wallDot=(w,col)=>{ if(!w||!w.px)return; const px2=xOf(w.px);
+    x.fillStyle=col; x.beginPath(); x.arc(px2,yOf(0)-2,3.4,0,7); x.fill();
+    x.font='10px Georgia'; x.fillText('$'+fmtP(w.px),Math.max(2,Math.min(W-64,px2-20)),H-2); };
+  wallDot(bidWall,'#37d67a'); wallDot(askWall,'#ff5252');
+  x.fillStyle='#8a8478'; x.font='10px Georgia';
+  x.fillText('$'+fmtP(lo),4,H-2); const s='$'+fmtP(hi); x.fillText(s,W-4-x.measureText(s).width,H-2);
+}
+function drawLtcDepth(){
+  const c=ltcBook.calc, cv=$('ltcDepthCv');
+  if(c&&cv){
+    if(!ltcBook.dispB||!ltcBook.dispA||ltcBook.dispB.length!==c.B.arr.length||ltcBook.dispA.length!==c.A.arr.length){
+      ltcBook.dispB=c.B.arr.map(r=>[r[0],r[1]]); ltcBook.dispA=c.A.arr.map(r=>[r[0],r[1]]);
+    } else {
+      const L=(d,t)=>{ for(let i=0;i<d.length;i++){ d[i][0]=t[i][0]; d[i][1]+=(t[i][1]-d[i][1])*0.30; } };
+      L(ltcBook.dispB,c.B.arr); L(ltcBook.dispA,c.A.arr);
+    }
+    drawDepthInto(cv,ltcBook.dispB,ltcBook.dispA,c.mid,c.B.wall,c.A.wall);
+  }
+  requestAnimationFrame(drawLtcDepth);
+}
+setInterval(renderLTC,300);
+requestAnimationFrame(drawLtcDepth);
 
 /* ================= BTC battlefield tools (collector JSON) ================= */
 let btData=null, btFetchedAt=0;
@@ -526,7 +745,8 @@ function renderBT(){
     const tag=f.kind==='liquidation'?'<span class="tag liq">LIQUIDATION</span>'
       :f.kind==='long'?'<span class="tag long">LONG</span>':'<span class="tag short">SHORT</span>';
     const t=f.ts?new Date(f.ts).toLocaleTimeString('en-GB'):'—';
-    return '<div class="feedrow"><span class="t">'+t+'</span>'+tag+'<span>'+esc(f.label)
+    const coinChip=f.coin==='LTC'?'<span class="tag" style="background:#2c2822;color:var(--gold)">Ł LTC</span>':'';
+    return '<div class="feedrow"><span class="t">'+t+'</span>'+tag+coinChip+'<span>'+esc(f.label)
       +(f.exchange?' <span style="color:var(--dim)">'+esc(f.exchange)+'</span>':'')+'</span>'
       +(f.price?'<span class="px">@ $'+fmtP(f.price)+'</span>':'')
       +'<span class="amt">'+(f.notional!=null?fmt$(f.notional):'—')+'</span></div>';
@@ -534,40 +754,14 @@ function renderBT(){
   if(liqLaneOff) html='<div class="offline">LIQUIDATIONS — FEED OFFLINE (both print lanes down)</div>'+html;
   if(!feed.length&&!liqLaneOff) html='<div class="offline">FEED — NO EVENTS IN THE CURRENT READ</div>';
   $('feedList').innerHTML=html;
-  $('feedAge').textContent='lanes: Newhedge tape (large trades / options) · OKX liquidation prints · Binance liquidation stream · source read '+(srcTs?ageStr(srcTs):'—');
+  $('feedAge').textContent='lanes: Newhedge BTC tape (large trades / options) · OKX BTC + LTC liquidation prints · Binance BTC liquidation stream · source read '+(srcTs?ageStr(srcTs):'—');
   if(d.read) $('btRead').innerHTML=d.read;
 }
 function drawDepth(d){
-  const cv=$('depthCv'); if(!cv||!cv.clientWidth)return;
-  const dpr=window.devicePixelRatio||1;
-  const W=cv.clientWidth,H=cv.clientHeight;
-  if(cv.width!==Math.round(W*dpr)){ cv.width=Math.round(W*dpr); cv.height=Math.round(H*dpr); }
-  const x=cv.getContext('2d'); x.setTransform(dpr,0,0,dpr,0,0);
-  x.clearRect(0,0,W,H);
-  const dep=d.depth||{}; const bids=dep.bids||[], asks=dep.asks||[];
-  if(!bids.length||!asks.length){ x.fillStyle='#9a958a'; x.font='12px Georgia';
-    x.fillText('depth — waiting for a certified read',12,20); return; }
-  const mid=dep.mid||d.nh_price;
-  const lo=bids[bids.length-1][0], hi=asks[asks.length-1][0];
-  const maxC=Math.max(bids[bids.length-1][1],asks[asks.length-1][1]);
-  const xOf=p=>((p-lo)/(hi-lo))*W, yOf=c=>H-14-(c/maxC)*(H-30);
-  const area=(rows,col,fill)=>{ x.beginPath();
-    rows.forEach((r,i)=>{ const px=xOf(r[0]),py=yOf(r[1]); i?x.lineTo(px,py):x.moveTo(px,py); });
-    x.strokeStyle=col; x.lineWidth=1.6; x.stroke();
-    x.lineTo(xOf(rows[rows.length-1][0]),H-14); x.lineTo(xOf(rows[0][0]),H-14); x.closePath();
-    x.fillStyle=fill; x.fill(); };
-  area(bids,'#37d67a','rgba(55,214,122,.20)');
-  area(asks,'#ff5252','rgba(255,82,82,.20)');
-  if(mid){ const mx=xOf(mid); x.strokeStyle='rgba(232,225,216,.6)'; x.setLineDash([4,4]);
-    x.beginPath(); x.moveTo(mx,6); x.lineTo(mx,H-14); x.stroke(); x.setLineDash([]);
-    x.fillStyle='#e8e4d8'; x.font='bold 10px Georgia'; x.fillText('$'+fmtP(mid),Math.min(W-70,mx+5),14); }
-  const L=d.liquidity||{};
-  const wallDot=(w,col)=>{ if(!w||!w.price)return; const px=xOf(w.price);
-    x.fillStyle=col; x.beginPath(); x.arc(px,yOf(0)-2,3.4,0,7); x.fill();
-    x.font='10px Georgia'; x.fillText('$'+fmtP(w.price),Math.max(2,Math.min(W-64,px-20)),H-2); };
-  wallDot(L.bid_wall,'#37d67a'); wallDot(L.ask_wall,'#ff5252');
-  x.fillStyle='#8a8478'; x.font='10px Georgia';
-  x.fillText('$'+fmtP(lo),4,H-2); const s='$'+fmtP(hi); x.fillText(s,W-4-x.measureText(s).width,H-2);
+  const dep=d.depth||{}; const L=d.liquidity||{};
+  const bw=L.bid_wall&&L.bid_wall.price?{px:L.bid_wall.price}:null;
+  const aw=L.ask_wall&&L.ask_wall.price?{px:L.ask_wall.price}:null;
+  drawDepthInto($('depthCv'), dep.bids||[], dep.asks||[], dep.mid||d.nh_price, bw, aw);
 }
 $('refreshBtn').addEventListener('click',()=>{
   charts.forEach(ch=>{ loadHistory(ch,false); fetchStats(ch); });
