@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!-- BFBUILD 2026-11-10 v5 — full hologram restyle: War Cove blue-energy presentation pass over the whole setup; data, wiring and content unchanged from v4 -->
-<!-- WC-COMBINED v1 · 2026-11-11 — the War Cove paper game rides this page (the Warlord's combine order): THE MARKET vs THE ARMY duel bars, game arena (podium, books, player panel, open positions, call buttons), entry markers on the flank charts, podium host. Market layer untouched: the game layer is a read-only consumer of the game relay and renders no liquidation prices, ever. -->
+<!-- WC-COMBINED v1 · 2026-11-11 — the War Cove paper game rides this page (the Warlord's combine order): THE MARKET vs THE ARMY duel bars, game arena (podium, books, player panel, open positions, call buttons), entry markers on the flank charts, podium host. Market layer untouched: the game layer is a read-only consumer of the game relay, and every open position's liquidation price is shown on it (Warlord's order, Nov 11, 2026). -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -458,10 +458,10 @@ select#gLevSel{background:var(--panel2);color:var(--ink);border:1px solid var(--
       <div class="g-panel">
         <h3>🎯 OPEN POSITIONS — RIDING THE FIELD ABOVE</h3>
         <div class="g-tablewrap" style="max-height:300px">
-          <table class="gtab"><thead><tr><th>SOLDIER</th><th>SIDE</th><th>COIN</th><th>ENTRY</th><th>uPnL</th></tr></thead>
+          <table class="gtab"><thead><tr><th>SOLDIER</th><th>SIDE</th><th>COIN</th><th>ENTRY</th><th>LIQ</th><th>uPnL</th></tr></thead>
           <tbody id="gPositions"></tbody></table>
         </div>
-        <div class="g-note">Entry lines are drawn on the flank charts for the coin on show — entries only, by law: a liquidation price never appears on this page before the event itself.</div>
+        <div class="g-note">Entry lines are drawn on the flank charts for the coin on show — and every open position shows its LIQ, the price that wipes the trade, per the Warlord's order (Nov 11, 2026).</div>
       </div>
 
       <div class="g-panel">
@@ -599,7 +599,7 @@ select#gLevSel{background:var(--panel2);color:var(--ink);border:1px solid var(--
   Funding &amp; open interest: OKX. LTC battlefield: live OKX LTC/USDT spot book (books stream, sequence-checked, REST resync each minute) + the LTC 6H tape range — walls build and pull in real time.
   BTC board: the War Cove's OWN engine — computed on this box from public Bitunix + OKX exchange data (aggregated order books, trades, liquidation prints), no borrowed board, no login. Every read is checked against the Bitunix tape; a mismatch or a dead feed shows STALE, never a made-up number. BTC figures are never dressed as LTC.
   <br>Page build BFBUILD v5 · Nov 10, 2026 — LTC-first, own-engine BTC board · full hologram restyle, presentation only.
-<br>Combined build WC-COMBINED v1 · Nov 11, 2026 — the War Cove paper game arena rides this page: podium + books, THE ARMY bar (the Cove's paper sats, kept apart from the certified market bar by law), player records, open-position entry markers on the charts, and call buttons that build the Kick chat command. Game data: the War Cove game relay (state.json on the board repo); trades fire only in the Warlord's Kick chat — this page never trades, and no liquidation price is ever shown before its event.
+<br>Combined build WC-COMBINED v1 · Nov 11, 2026 — the War Cove paper game arena rides this page: podium + books, THE ARMY bar (the Cove's paper sats, kept apart from the certified market bar by law), player records, open-position entry markers on the charts, and call buttons that build the Kick chat command. Game data: the War Cove game relay (state.json on the board repo); trades fire only in the Warlord's Kick chat — this page never trades, and every open position's liquidation price is shown, per the Warlord's order.
 </footer>
 
 <script>
@@ -1158,9 +1158,10 @@ window.addEventListener('resize',()=>{ charts.forEach(requestDraw); if(btData)dr
 <script>
 /* ===== COMBINED BUILD — game layer logic (paper game on the battlefield).
    Read-only consumer of the game relay: this layer NEVER writes game
-   state, NEVER touches the engine, and NEVER renders a liquidation
-   price (positions are normalized field-by-field; the liq field is
-   not copied, not stored, not drawn). Market figures come from the
+   state and NEVER touches the engine. Positions are normalized
+   field-by-field, liquidation price included — the Warlord reversed
+   the no-display law on Nov 11, 2026: every open position's LIQ is
+   shown wherever the position is shown. Market figures come from the
    battlefield's own engine data (btData) and are rendered in their
    own bar — game numbers and market numbers are never blended. */
 (function(){
@@ -1344,8 +1345,9 @@ gSoundUi();
    - state.open_positions: [pos, ...]                     (live relay)
    - state.open_positions / state.positions: {user: pos}  (single slot)
    - {user: {long: pos, short: pos}}                      (two slots)
-   Fields are copied one by one. The liquidation price is deliberately
-   NOT among them — it never enters this page's data, let alone its DOM. */
+   Fields are copied one by one, the liquidation price among them —
+   it renders as LIQ wherever the position renders (Warlord's order,
+   Nov 11, 2026). */
 function gNormPos(raw, userKey){
   if(!raw || typeof raw !== 'object') return null;
   var side = String(raw.side || '').toLowerCase();
@@ -1359,6 +1361,7 @@ function gNormPos(raw, userKey){
     coin: String(raw.coin || 'LTC').toUpperCase(),
     lev: parseInt(raw.lev, 10) || 25,
     entry: entry,
+    liq: (raw.liq == null || isNaN(parseFloat(raw.liq))) ? null : parseFloat(raw.liq),
     upnl: (raw.upnl == null || isNaN(parseFloat(raw.upnl))) ? null : parseFloat(raw.upnl),
     margin: parseFloat(raw.margin_sats || raw.margin) || null
   };
@@ -1472,9 +1475,10 @@ function gRenderBooks(){
       + '<td class="g-side-' + p.side + '">' + p.side.toUpperCase() + ' ' + p.lev + 'x</td>'
       + '<td>' + gEsc(p.coin) + (p.coin === 'LTC' ? ' <span style="color:var(--gold)">★</span>' : '') + '</td>'
       + '<td>' + gFmtUsd(p.entry) + '</td>'
+      + '<td>' + (p.liq == null ? '—' : 'LIQ ' + gFmtUsd(p.liq)) + '</td>'
       + '<td class="' + (p.upnl == null ? '' : gCls(p.upnl)) + '">'
       + (p.upnl == null ? '—' : gFmtSats(p.upnl)) + '</td></tr>';
-  }).join('') || '<tr><td colspan="5" style="color:var(--dim)">No open positions.</td></tr>';
+  }).join('') || '<tr><td colspan="6" style="color:var(--dim)">No open positions.</td></tr>';
   gRenderBalance();
 }
 
@@ -1557,7 +1561,9 @@ function gRenderBalance(){
     posEl.innerHTML = f.posList.map(function(p){
       return '🎯 OPEN NOW: <span class="g-side-' + p.side + '">'
         + p.side.toUpperCase() + ' ' + p.lev + 'x</span> · ' + gEsc(p.coin)
-        + ' @ ' + gFmtUsd(p.entry) + ' · uPnL <span class="'
+        + ' @ ' + gFmtUsd(p.entry)
+        + (p.liq == null ? '' : ' · LIQ ' + gFmtUsd(p.liq))
+        + ' · uPnL <span class="'
         + (p.upnl == null ? '' : gCls(p.upnl)) + '">'
         + (p.upnl == null ? '—' : gFmtSats(p.upnl)) + '</span>'
         + ' — type <span class="g-cmd">!close ' + p.side + '</span> in chat to bank it';
@@ -1588,7 +1594,8 @@ if(G_NAME) $('gNameInput').value = G_NAME;
    chart canvas. The overlay recomputes the chart's exact price scale
    (same window, pad, zoom and offset math as drawChart) and draws the
    open positions' ENTRY lines + name chips for the coin on show.
-   Entries only — no liquidation level exists in this layer's data. */
+   Entry lines + chips; each chip also carries the position's LIQ
+   price from the relay data (Warlord's order, Nov 11, 2026). */
 var G_OVERLAYS = [];
 function gChartScale(ch){
   var ha = ch.ha;
@@ -1650,20 +1657,28 @@ function gDrawMarkers(){
     var yOf = function(v){ return H - ((v - sc.mn) / (sc.mx - sc.mn)) * H; };
     x.font = 'bold 10.5px "Segoe UI", Arial, sans-serif';
     /* chip layout: clamp to the plot, sort, then a forward + backward
-       pass holds every chip 17px clear of its neighbour — a crowded
-       entry zone (or several entries off-screen on the same side)
-       stacks into a readable column instead of overdrawing itself */
+       pass holds every chip clear of its neighbour by the chips' own
+       heights (two lines when a LIQ rides the chip) — a crowded entry
+       zone (or several entries off-screen on the same side) stacks
+       into a readable column instead of overdrawing itself */
     var items = mine.map(function(p){
       var y = yOf(p.entry);
-      return {p: p, y: y, cy: Math.max(9, Math.min(H - 9, y))};
+      var hh = p.liq != null ? 15 : 8;
+      return {p: p, y: y, hh: hh,
+              cy: Math.max(hh + 1, Math.min(H - hh - 1, y))};
     }).sort(function(a, b){ return a.cy - b.cy; });
     var i2;
     for(i2 = 1; i2 < items.length; i2++)
-      items[i2].cy = Math.max(items[i2].cy, items[i2 - 1].cy + 17);
-    if(items.length && items[items.length - 1].cy > H - 9){
-      items[items.length - 1].cy = H - 9;
-      for(i2 = items.length - 2; i2 >= 0; i2--)
-        items[i2].cy = Math.min(items[i2].cy, items[i2 + 1].cy - 17);
+      items[i2].cy = Math.max(items[i2].cy,
+        items[i2 - 1].cy + items[i2 - 1].hh + items[i2].hh + 3);
+    if(items.length){
+      var lastIt = items[items.length - 1];
+      if(lastIt.cy > H - lastIt.hh - 1){
+        lastIt.cy = H - lastIt.hh - 1;
+        for(i2 = items.length - 2; i2 >= 0; i2--)
+          items[i2].cy = Math.min(items[i2].cy,
+            items[i2 + 1].cy - items[i2 + 1].hh - items[i2].hh - 3);
+      }
     }
     items.forEach(function(it){
       var p = it.p, y = it.y, cy = it.cy;
@@ -1679,21 +1694,28 @@ function gDrawMarkers(){
         x.restore();
       }
       var arrow = inView ? '' : (y < 0 ? '▲ ' : '▼ ');
-      var tw = x.measureText(arrow + label).width + 12;
+      var liqLabel = p.liq != null ? 'LIQ ' + gFmtUsd(p.liq) : '';
+      var tw = Math.max(x.measureText(arrow + label).width,
+                        x.measureText(liqLabel).width) + 12;
       x.fillStyle = 'rgba(5,10,16,.88)';
       x.strokeStyle = col; x.lineWidth = 1;
-      x.beginPath(); x.rect(5, cy - 8, tw, 16); x.fill(); x.stroke();
+      x.beginPath(); x.rect(5, cy - it.hh, tw, it.hh * 2); x.fill(); x.stroke();
       if(inView && Math.abs(cy - y) > 1){
         x.strokeStyle = col; x.globalAlpha = 0.6;
         x.beginPath(); x.moveTo(5, cy); x.lineTo(5, y); x.stroke();
         x.globalAlpha = 1;
       }
+      var base1 = liqLabel ? cy - 3.5 : cy + 3.5;
       x.fillStyle = col;
-      x.fillText(arrow + label, 11, cy + 3.5);
+      x.fillText(arrow + label, 11, base1);
+      if(liqLabel){
+        x.fillStyle = '#ffd166';
+        x.fillText(liqLabel, 11, cy + 10.5);
+      }
       if(p.upnl != null){
         var up = (p.upnl >= 0 ? '+' : '−') + gFmtInt(Math.abs(p.upnl));
         x.fillStyle = p.upnl >= 0 ? '#2ee66b' : '#ff4d5e';
-        x.fillText(up, 11 + tw + 2, cy + 3.5);
+        x.fillText(up, 11 + tw + 2, base1);
       }
     });
   });
