@@ -192,6 +192,73 @@
     .wc-frame{inset:3px}
     .wc-frame i{width:34px;height:34px}
   }
+/* ===== War Cove paper game layer (combined build v6) — scoped styles.
+   Everything lives under #wcgGame with wcg- prefixed classes so the
+   sealed BFBUILD v5 market layer is never restyled. ===== */
+#wcgGame .wcg-orb{display:inline-block;width:13px;height:13px;border-radius:50%;
+  background:radial-gradient(circle at 42% 38%,#dff4ff 0%,#57c8ff 42%,#1c6dd9 78%,#0a2c5e 100%);
+  box-shadow:0 0 9px 2px rgba(87,200,255,.75),0 0 22px 6px rgba(60,140,255,.35);
+  vertical-align:-2px;margin-right:7px;animation:wcgPulse 2.6s ease-in-out infinite}
+@keyframes wcgPulse{0%,100%{box-shadow:0 0 8px 2px rgba(87,200,255,.6),0 0 18px 5px rgba(60,140,255,.28)}
+  50%{box-shadow:0 0 13px 3px rgba(87,200,255,.95),0 0 30px 9px rgba(60,140,255,.45)}}
+#wcgGame .wcg-paperbar{margin:10px 0}
+#wcgGame .wcg-papertag{float:right;color:#0b0f14;background:var(--amber);border-radius:3px;
+  padding:1px 7px;font-size:10px;letter-spacing:1px;font-weight:bold}
+#wcgGame .wcg-barlabels{display:flex;justify-content:space-between;font-weight:bold;
+  font-size:14px;margin:6px 0 5px;font-variant-numeric:tabular-nums}
+#wcgGame .wcg-greentxt{color:var(--green)} #wcgGame .wcg-redtxt{color:var(--red)}
+#wcgGame .wcg-track{display:flex;height:20px;border:1px solid var(--line);border-radius:4px;
+  overflow:hidden;background:repeating-linear-gradient(45deg,#0a0f14 0 8px,#0e141b 8px 16px)}
+#wcgGame .wcg-fillg{background:linear-gradient(180deg,#3df07e,#1a9e4b);transition:width .8s ease}
+#wcgGame .wcg-fillr{background:linear-gradient(180deg,#ff6b78,#c22333);transition:width .8s ease}
+#wcgGame .wcg-lbrow{display:flex;align-items:baseline;gap:8px;padding:4px 6px;
+  border-bottom:1px solid rgba(34,48,61,.55);font-variant-numeric:tabular-nums}
+#wcgGame .wcg-lbrow:last-child{border-bottom:none}
+#wcgGame .wcg-rank{color:var(--dim);font-weight:bold;min-width:30px}
+#wcgGame .wcg-name{flex:1;font-weight:bold;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#wcgGame .wcg-wl{color:var(--dim);font-size:12px;white-space:nowrap}
+#wcgGame .wcg-bal{font-weight:bold;white-space:nowrap}
+#wcgGame .wcg-lbrow.wcg-first{background:linear-gradient(90deg,rgba(255,215,94,.20),rgba(255,215,94,.05));
+  border:1px solid rgba(255,215,94,.55);border-radius:4px}
+#wcgGame .wcg-lbrow.wcg-first .wcg-rank,
+#wcgGame .wcg-lbrow.wcg-first .wcg-name,
+#wcgGame .wcg-lbrow.wcg-first .wcg-bal{color:var(--gold)}
+#wcgGame .wcg-namerow{display:flex;gap:8px;margin-bottom:6px}
+#wcgGame input[type=text]{flex:1;background:#0a0f14;border:1px solid var(--line);color:var(--ink);
+  border-radius:4px;padding:8px 10px;font-size:14px;min-width:0}
+#wcgGame button{background:#16222d;border:1px solid var(--ice-dim);color:var(--ink);
+  border-radius:4px;padding:8px 12px;font-weight:bold;cursor:pointer;letter-spacing:.4px}
+#wcgGame button:hover{border-color:var(--holo);color:#fff}
+#wcgGame .wcg-smallbtn{padding:2px 8px;font-size:11px}
+#wcgGame .wcg-posbox{margin-top:8px;border:1px dashed var(--ice-dim);border-radius:4px;
+  padding:8px 10px;font-size:13px;line-height:1.55}
+#wcgGame .side-long{color:var(--green);font-weight:bold}
+#wcgGame .side-short{color:var(--red);font-weight:bold}
+#wcgGame .cmd{color:var(--gold);font-weight:bold}
+#wcgGame .pos{color:var(--green)} #wcgGame .neg{color:var(--red)}
+#wcgGame .wcg-firebox{margin-top:12px;border-top:1px solid var(--line);padding-top:10px}
+#wcgGame .wcg-coinrow{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+#wcgGame .wcg-tab.on{border-color:var(--gold);color:var(--gold)}
+#wcgGame .wcg-levwrap{margin-left:auto;color:var(--dim);font-size:12px;letter-spacing:1px}
+#wcgGame select{background:#0a0f14;border:1px solid var(--line);color:var(--ink);
+  border-radius:4px;padding:6px;font-size:14px}
+#wcgGame .wcg-btnrow{display:flex;gap:8px;margin-top:9px}
+#wcgGame .wcg-long{flex:1;background:linear-gradient(180deg,#14532d,#0d3a1f);border-color:#2ee66b;
+  color:#c9ffe0;font-size:16px;padding:11px}
+#wcgGame .wcg-short{flex:1;background:linear-gradient(180deg,#5f1d27,#3d1219);border-color:#ff4d5e;
+  color:#ffd7db;font-size:16px;padding:11px}
+#wcgGame .wcg-cmdout{display:none;margin-top:9px;align-items:center;gap:9px;flex-wrap:wrap;
+  border:1px solid var(--gold);border-radius:4px;padding:8px 10px;background:rgba(255,215,94,.07)}
+#wcgGame .wcg-cmdout.show{display:flex}
+#wcgGame .wcg-cmdtxt{font-size:17px;font-weight:bold;color:var(--gold);letter-spacing:.5px}
+#wcgGame .wcg-kicklink{color:var(--holo);font-weight:bold;text-decoration:none;margin-left:auto}
+#wcgGame .wcg-kicklink:hover{text-decoration:underline}
+#wcgGame .wcg-podium{color:var(--gold);font-size:13px;line-height:1.5;margin-bottom:7px}
+#wcgGame .wcg-evrow{display:flex;gap:9px;padding:3px 0;border-bottom:1px solid rgba(34,48,61,.45);
+  font-size:13px;align-items:baseline}
+#wcgGame .wcg-evrow:last-child{border-bottom:none}
+#wcgGame .wcg-evt{color:var(--dim);font-size:11px;white-space:nowrap;font-variant-numeric:tabular-nums}
+
 </style>
 </head>
 <body>
@@ -209,6 +276,76 @@
   <section class="flank" id="flankL"></section>
   <section class="flank" id="flankR"></section>
 </div>
+
+<section class="ltools" id="wcgGame">
+  <h2>⚔ WAR COVE PAPER TRADING GAME <span class="live" style="margin-left:6px"><span class="dot"></span>LIVE</span></h2>
+  <div class="bsub"><span class="wcg-orb" aria-hidden="true"></span><b style="color:var(--holo)">The Enity runs the books.</b>
+  Every soldier starts with 100,000 sats of virtual money — no real money, ever. One <b style="color:var(--green)">LONG</b> and one <b style="color:var(--red)">SHORT</b> can ride at the same time, on different coins. Trades fire only from your own Kick chat — this page is the field, the chat is the trigger. <span class="age" id="wcgAge"></span></div>
+
+  <div class="panel wcg-paperbar">
+    <h3>THE ARMY'S PAPER WAR — OPEN POSITIONS IN SATS <span class="wcg-papertag">PAPER · VIRTUAL SATS</span></h3>
+    <div class="wcg-barlabels">
+      <span class="wcg-greentxt" id="wcgArmyGTxt">🟢 LONGS — —</span>
+      <span class="wcg-redtxt" id="wcgArmyRTxt">— 🔴 SHORTS</span>
+    </div>
+    <div class="wcg-track"><div class="wcg-fillg" id="wcgArmyG" style="width:50%"></div><div class="wcg-fillr" id="wcgArmyR" style="width:50%"></div></div>
+    <div class="rowline"><span class="k">Realized on the books</span><b id="wcgRealized">—</b></div>
+    <div class="age">This bar is the ARMY's paper war — virtual sats on the game's books. The market win bars on this page stay market truth. Two bars, two stories — they never mix.</div>
+  </div>
+
+  <div class="bgrid">
+    <div class="panel">
+      <h3>THE BOOKS — LEADERBOARD</h3>
+      <div id="wcgLbBody"><div class="rowline"><span class="k">loading the books…</span></div></div>
+      <div class="age" id="wcgCounts"></div>
+    </div>
+
+    <div class="panel">
+      <h3>YOUR PANEL — YOUR BOOKS ONLY</h3>
+      <div id="wcgBalAnon">
+        <div class="wcg-namerow">
+          <input id="wcgNameInput" type="text" placeholder="Your Kick name" autocomplete="off" spellcheck="false">
+          <button id="wcgNameGo">SHOW MY BOOKS</button>
+        </div>
+        <div class="age" id="wcgBalMsg">Type the name you play under in the Kick chat. Display only — your trades fire from your own chat, never from this page.</div>
+      </div>
+      <div id="wcgBalCard" style="display:none">
+        <div class="rowline"><b id="wcgBalWho" style="color:var(--holo)">—</b><button id="wcgNotYou" class="wcg-smallbtn">not you?</button></div>
+        <div class="rowline"><span class="k">BALANCE</span><b class="big" style="font-size:25px"><span id="wcgBalAmt">—</span> <span style="font-size:12px;color:var(--dim)">sats</span></b></div>
+        <div class="rowline"><span class="k">RANK</span><b id="wcgBalRank">—</b></div>
+        <div class="rowline"><span class="k">RECORD</span><b id="wcgBalWL">—</b></div>
+        <div class="rowline"><span class="k">REALIZED P&amp;L</span><b id="wcgBalPnl">—</b></div>
+        <div class="rowline"><span class="k">TRADES LIQUIDATED</span><b id="wcgBalLiqs">—</b></div>
+        <div class="rowline"><span class="k">ACCOUNTS BLOWN</span><b id="wcgBalBusts">—</b></div>
+        <div class="wcg-posbox" id="wcgBalPos">—</div>
+      </div>
+      <div class="wcg-firebox">
+        <div class="wcg-coinrow" id="wcgCoinTabs">
+          <button class="wcg-tab on" data-coin="LTC">Ł LTC ★</button><button class="wcg-tab" data-coin="BTC">BTC</button><button class="wcg-tab" data-coin="ETH">ETH</button>
+          <span class="wcg-levwrap">SIZE <select id="wcgLevSel">
+            <option value="5">5x</option><option value="10">10x</option><option value="15">15x</option><option value="20">20x</option><option value="25" selected>25x</option><option value="30">30x</option><option value="40">40x</option><option value="50">50x</option><option value="60">60x</option><option value="75">75x</option><option value="100">100x</option>
+          </select></span>
+        </div>
+        <div class="wcg-btnrow">
+          <button id="wcgBtnLong" class="wcg-long">🟢 LONG</button>
+          <button id="wcgBtnShort" class="wcg-short">🔴 SHORT</button>
+        </div>
+        <div class="wcg-cmdout" id="wcgCmdOut">
+          <span class="wcg-cmdtxt" id="wcgCmdText">!long LTC 25x</span>
+          <button id="wcgCopyBtn" class="wcg-smallbtn">COPY</button>
+          <a class="wcg-kicklink" href="https://kick.com/longshotwolf" target="_blank" rel="noopener">FIRE IT IN KICK CHAT →</a>
+        </div>
+        <div class="age" id="wcgCopyMsg">Pick your coin, set your size, fire your call — the button builds the command and takes you to the chat. Every trade is 10,000 sats of virtual money.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel" style="margin-top:10px">
+    <h3>FIELD WIRE — THE GAME, AS IT HAPPENS</h3>
+    <div class="wcg-podium" id="wcgPodium"></div>
+    <div id="wcgEvents"><div class="rowline"><span class="k">waiting for the wire…</span></div></div>
+  </div>
+</section>
 
 <section class="ltools" id="ltools">
   <h2>Ł LTC BATTLEFIELD — LIVE BOOK <span class="live" style="margin-left:6px"><span class="dot"></span>LIVE</span></h2>
@@ -313,7 +450,7 @@
   Flank candles: OKX live tape, Heikin-Ashi only — drag to pan history, wheel / pinch to zoom, drag the price axis to stretch, double-click or ⟲ LIVE VIEW to snap back.
   Funding &amp; open interest: OKX. LTC battlefield: live OKX LTC/USDT spot book (books stream, sequence-checked, REST resync each minute) + the LTC 6H tape range — walls build and pull in real time.
   BTC board: the War Cove's OWN engine — computed on this box from public Bitunix + OKX exchange data (aggregated order books, trades, liquidation prints), no borrowed board, no login. Every read is checked against the Bitunix tape; a mismatch or a dead feed shows STALE, never a made-up number. BTC figures are never dressed as LTC.
-  <br>Page build BFBUILD v5 · Nov 10, 2026 — LTC-first, own-engine BTC board · full hologram restyle, presentation only.
+  <br>Page build BFBUILD v5 · Nov 10, 2026 — LTC-first, own-engine BTC board · full hologram restyle, presentation only.<br>COMBINED BUILD v6 · Nov 11, 2026 — the War Cove paper game rides this page: the books, the army’s paper bar, your panel, fire-your-call and entry markers on the flank charts, all off the game’s published state. The Enity runs the books.
 </footer>
 
 <script>
@@ -550,6 +687,7 @@ function drawChart(ch){
       x.beginPath(); x.moveTo(0,y); x.lineTo(plotW,y); x.stroke(); x.setLineDash([]);
       x.fillStyle='#eaf6ff'; x.fillRect(plotW+2,y-8,AXIS_W-4,16);
       x.fillStyle='#141005'; x.font='bold 10px "Segoe UI", Arial, sans-serif'; x.fillText(fmtP(ch.price),plotW+6,y+3); } }
+  if(window.WCG&&WCG.drawEntries) WCG.drawEntries(x,ch,yOf,mn,mx,plotW,plotH);
   const last=ha[ha.length-1];
   const coin=ch.inst.split('-')[0];
   const midHA=(last[2]+last[3])/2;
@@ -868,6 +1006,269 @@ loadBattlefield(false);
 setInterval(()=>loadBattlefield(false),30000);
 setInterval(()=>{ if(btData) renderBT(); },20000);
 window.addEventListener('resize',()=>{ charts.forEach(requestDraw); if(btData)drawDepth(btData); });
+</script>
+<script>
+/* =====================================================================
+   WAR COVE PAPER GAME LAYER — combined build v6 (Nov 11, 2026)
+   The game rides the battlefield page. Self-contained: every function
+   is wcg-prefixed, all state hangs off window.WCG, and a failure in
+   this layer can never touch the sealed BFBUILD v5 market layer —
+   the only contact point is the guarded drawEntries hook in drawChart.
+
+   DATA: the game's already-published slices — the same state.json the
+   board relay pushes to the war-cove-board repo, plus its lookup
+   shards. FIELD LAW: open positions are read through a whitelist
+   (user · side · coin · lev · entry · upnl). The published state also
+   carries a liquidation field for the game's own board contract —
+   this layer NEVER reads it and NEVER renders it. Entries are public
+   record (!positions); liquidation prices appear nowhere.
+   ===================================================================== */
+'use strict';
+(function(){
+const BOARD='https://longshotwolf.github.io/war-cove-board/';
+const STATE_URL=BOARD+'state.json';
+const LOOKUP_URL=BOARD+'lookup/';
+const $=id=>document.getElementById(id);
+const escS=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fmtN=v=>v==null||isNaN(v)?'—':Math.round(v).toLocaleString('en-US');
+const fmtSats=v=>{ if(v==null||isNaN(v))return '—';
+  return (v>0?'+':v<0?'−':'')+Math.abs(Math.round(v)).toLocaleString('en-US')+' sats'; };
+const fmtUsd=v=>{ if(v==null||isNaN(v))return '$—'; const a=Math.abs(v);
+  const d=a>=1000?2:a>=100?2:a>=1?2:4;
+  return '$'+Number(v).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d}); };
+
+window.WCG={ positions:[], state:null,
+  /* Entry markers on the flank charts — called from drawChart through
+     the guarded hook. Entries only; a position whose entry sits
+     outside the visible range simply doesn't draw. */
+  drawEntries:function(x,ch,yOf,mn,mx,plotW,plotH){
+    const pos=window.WCG.positions; if(!pos||!pos.length)return;
+    const coin=ch.inst.split('-')[0];
+    const mine=pos.filter(p=>p.coin===coin&&p.entry>=mn&&p.entry<=mx);
+    if(!mine.length)return;
+    mine.sort((a,b)=>b.entry-a.entry);
+    x.save();
+    x.font='bold 10px "Segoe UI", Arial, sans-serif';
+    let lastTextY=-20;
+    for(const p of mine){
+      const y=yOf(p.entry), col=p.side==='long'?'#2ee66b':'#ff4d5e';
+      x.strokeStyle=col; x.globalAlpha=.55; x.setLineDash([6,4]); x.lineWidth=1;
+      x.beginPath(); x.moveTo(0,y); x.lineTo(plotW,y); x.stroke();
+      x.setLineDash([]); x.globalAlpha=1;
+      const label=(p.side==='long'?'▲ LONG ':'▼ SHORT ')+p.lev+'x @ $'
+        +(typeof fmtP==='function'?fmtP(p.entry):p.entry)+' · '+p.user;
+      const tw=x.measureText(label).width+10;
+      let ty=Math.max(9,Math.min(plotH-9,y));
+      if(Math.abs(ty-lastTextY)<13) ty=lastTextY+13;
+      if(ty>plotH-9) ty=plotH-9;
+      lastTextY=ty;
+      x.fillStyle='rgba(6,10,14,.88)'; x.fillRect(4,ty-8,tw,15);
+      x.strokeStyle=col; x.strokeRect(4.5,ty-7.5,tw-1,14);
+      x.fillStyle='#eaf6ff'; x.fillText(label,9,ty+3.5);
+    }
+    x.restore();
+  }
+};
+
+/* ---------- the army's paper war ---------- */
+function wcgRenderArmy(s){
+  const margin=s.margin_sats||10000;
+  let gN=0,rN=0,gU=0,rU=0;
+  for(const p of (s.open_positions||[])){
+    if(p.side==='long'){ gN++; gU+=Number(p.upnl)||0; }
+    else if(p.side==='short'){ rN++; rU+=Number(p.upnl)||0; }
+  }
+  const gS=gN*margin, rS=rN*margin, tot=gS+rS;
+  const gPct=tot?gS/tot*100:50;
+  $('wcgArmyG').style.width=gPct+'%';
+  $('wcgArmyR').style.width=(100-gPct)+'%';
+  $('wcgArmyGTxt').textContent='🟢 LONGS — '+gN+' open · '+fmtN(gS)+' sats in · uPnL '+fmtSats(gU);
+  $('wcgArmyRTxt').textContent='uPnL '+fmtSats(rU)+' · '+fmtN(rS)+' sats in · '+rN+' open — 🔴 SHORTS';
+  const A=s.armies||{};
+  const gr=A.green&&A.green.realized, rr=A.red&&A.red.realized;
+  $('wcgRealized').textContent=(gr!=null||rr!=null)
+    ? 'GREEN '+fmtSats(gr||0)+' · RED '+fmtSats(rr||0) : '—';
+}
+
+/* ---------- the books ---------- */
+function wcgRenderBooks(s){
+  const lb=(s.leaderboard_top100||s.leaderboard||[]).slice(0,10);
+  $('wcgLbBody').innerHTML=lb.length?lb.map((r,i)=>
+    '<div class="wcg-lbrow'+(i===0?' wcg-first':'')+'">'
+    +'<span class="wcg-rank">'+(i===0?'👑 ':'')+'#'+(i+1)+'</span>'
+    +'<span class="wcg-name">'+escS(r.display||r.user)
+    +(r.badges&&r.badges.length?' '+escS(r.badges.join('')):'')
+    +(r.title?' · '+escS(r.title):'')+'</span>'
+    +'<span class="wcg-wl">'+(r.wins||0)+'W – '+(r.losses||0)+'L</span>'
+    +'<span class="wcg-bal">'+fmtN(r.balance)+' sats</span></div>').join('')
+    :'<div class="rowline"><span class="k">the books are empty — first trade writes the first line</span></div>';
+  const c=s.counts||{};
+  $('wcgCounts').textContent=(c.players!=null?c.players+' soldiers on the books':'')
+    +(c.open_positions!=null?' · '+c.open_positions+' positions open now':'')
+    +' · the board at longshotwolf.github.io/war-cove-board carries the full top 100';
+}
+
+/* ---------- your panel (the board's own pattern, fields whitelisted) ---------- */
+let wcgName='';
+try{ wcgName=localStorage.getItem('wc-name')||''; }catch(e){}
+const wcgShards={}, wcgTried={};
+let wcgShardHit=null;
+function wcgShardName(q){ const c=(q||'').charAt(0);
+  return /[a-z0-9]/.test(c)?c:'misc'; }
+function wcgShardLookup(q){
+  if(wcgTried[q])return; wcgTried[q]=true;
+  const shard=wcgShardName(q);
+  if(!wcgShards[shard]){
+    wcgShards[shard]=fetch(LOOKUP_URL+shard+'.json?t='+Date.now(),{cache:'no-store'})
+      .then(r=>r.ok?r.json():{}).catch(()=>({}));
+  }
+  wcgShards[shard].then(map=>{
+    const e=map&&map[q];
+    if(e){ wcgShardHit={key:q,rank:e[0],row:{display:e[1],balance:e[2],
+      realized:e[3],wins:e[4],losses:e[5],liqs:e[6],busts:e[7],
+      trades:e[8]||0,badges:e[9]?e[9].split(''):[],title:e[10]||''}};
+      wcgRenderPanel(); }
+  });
+}
+function wcgFindPlayer(s,name){
+  const q=(name||'').trim().toLowerCase();
+  if(!q||!s)return null;
+  const out={row:null,rank:null,total:0,poss:[],display:name};
+  const lb=s.leaderboard_top100||s.leaderboard||[];
+  out.total=(s.counts&&s.counts.ranked)||lb.length;
+  for(let i=0;i<lb.length;i++)
+    if((lb[i].display||'').toLowerCase()===q){
+      out.row=lb[i]; out.rank=i+1; out.display=lb[i].display; }
+  if(!out.row&&wcgShardHit&&wcgShardHit.key===q){
+    out.row=wcgShardHit.row; out.rank=wcgShardHit.rank;
+    out.display=wcgShardHit.row.display; }
+  for(const p of (s.open_positions||[]))
+    if((p.user||'').toLowerCase()===q){
+      out.poss.push({user:p.user,side:p.side,coin:p.coin||'LTC',
+        lev:p.lev,entry:p.entry,upnl:p.upnl});
+      out.display=p.user; }
+  return (out.row||out.poss.length)?out:null;
+}
+function wcgRenderPanel(){
+  const s=window.WCG.state; if(!s)return;
+  const anon=$('wcgBalAnon'), card=$('wcgBalCard'), msg=$('wcgBalMsg');
+  if(!wcgName){ anon.style.display=''; card.style.display='none'; return; }
+  const f=wcgFindPlayer(s,wcgName);
+  if(!f){
+    const q=wcgName.trim().toLowerCase();
+    if(!(wcgShardHit&&wcgShardHit.key===q)) wcgShardLookup(q);
+    anon.style.display=''; card.style.display='none';
+    msg.innerHTML='New soldier — you start with <b>100,000 sats</b>. Your books '
+      +'appear here after your first trade.<br>(“'+escS(wcgName)+'” isn’t on the '
+      +'books yet — check the spelling matches your Kick chat name.)';
+    return;
+  }
+  anon.style.display='none'; card.style.display='';
+  const start=s.starting_balance_sats||100000;
+  $('wcgBalWho').textContent='@'+f.display
+    +(f.row&&f.row.badges?' '+f.row.badges.join(''):'')
+    +(f.row&&f.row.title?' · '+f.row.title:'')
+    +(f.rank?' · RANK #'+f.rank+' OF '+f.total:' · NO SETTLED TRADES YET');
+  $('wcgBalAmt').textContent=fmtN(f.row?f.row.balance:start);
+  $('wcgBalRank').textContent=f.rank?'#'+f.rank:'—';
+  $('wcgBalWL').textContent=f.row?(f.row.wins||0)+'W – '+(f.row.losses||0)+'L':'0W – 0L';
+  const pnl=$('wcgBalPnl');
+  pnl.textContent=f.row?fmtSats(f.row.realized):'+0 sats';
+  pnl.className=f.row?(f.row.realized>0?'pos':f.row.realized<0?'neg':''):'';
+  $('wcgBalLiqs').textContent=f.row?(f.row.liqs||0):0;
+  $('wcgBalBusts').textContent=f.row?(f.row.busts||0):0;
+  const posEl=$('wcgBalPos');
+  if(f.poss.length){
+    posEl.innerHTML='🎯 OPEN NOW: '+f.poss.map(p=>
+      '<span class="side-'+p.side+'">'+p.side.toUpperCase()+' '+(p.lev||25)
+      +'x</span> · '+escS(p.coin)+' @ '+fmtUsd(p.entry)+' · uPnL '
+      +'<span class="'+((p.upnl||0)>=0?'pos':'neg')+'">'+fmtSats(p.upnl||0)+'</span>'
+    ).join(' &nbsp;+&nbsp; ')
+    +(f.poss.length>1
+      ?' — type <span class="cmd">!close long</span> or <span class="cmd">!close short</span> in chat to bank one'
+      :' — type <span class="cmd">!close</span> in chat to bank it');
+  } else {
+    posEl.innerHTML='No open position — fire a call below and paste it in the chat.';
+  }
+}
+$('wcgNameGo').addEventListener('click',()=>{
+  const v=$('wcgNameInput').value.trim(); if(!v)return;
+  wcgName=v; wcgShardHit=null;
+  try{ localStorage.setItem('wc-name',v); }catch(e){}
+  wcgRenderPanel();
+});
+$('wcgNameInput').addEventListener('keydown',ev=>{
+  if(ev.key==='Enter') $('wcgNameGo').click(); });
+$('wcgNotYou').addEventListener('click',()=>{
+  wcgName=''; try{ localStorage.removeItem('wc-name'); }catch(e){}
+  $('wcgNameInput').value=''; wcgRenderPanel();
+});
+if(wcgName) $('wcgNameInput').value=wcgName;
+
+/* ---------- fire your call (the board's wcFire pattern) ---------- */
+let wcgCoin='LTC';
+$('wcgCoinTabs').addEventListener('click',ev=>{
+  const b=ev.target.closest?ev.target.closest('.wcg-tab'):null; if(!b)return;
+  wcgCoin=b.getAttribute('data-coin');
+  document.querySelectorAll('#wcgCoinTabs .wcg-tab').forEach(t=>
+    t.classList.toggle('on',t===b));
+});
+function wcgCopyCmd(cmd){
+  const msg=$('wcgCopyMsg');
+  const done=()=>{ if(msg)msg.textContent=
+    'Copied — now paste it in the Kick chat to fire your trade.'; };
+  if(navigator.clipboard&&navigator.clipboard.writeText)
+    navigator.clipboard.writeText(cmd).then(done,function(){});
+}
+function wcgFire(side){
+  const lev=$('wcgLevSel').value;
+  const cmd='!'+side+' '+wcgCoin+' '+lev+'x';
+  $('wcgCmdText').textContent=cmd;
+  $('wcgCmdOut').classList.add('show');
+  wcgCopyCmd(cmd);
+  window.open('https://kick.com/longshotwolf','_blank');
+}
+$('wcgBtnLong').addEventListener('click',()=>wcgFire('long'));
+$('wcgBtnShort').addEventListener('click',()=>wcgFire('short'));
+$('wcgCopyBtn').addEventListener('click',()=>wcgCopyCmd($('wcgCmdText').textContent));
+
+/* ---------- field wire ---------- */
+function wcgRenderWire(s){
+  const pd=s.podium;
+  $('wcgPodium').innerHTML=pd&&pd.text?'🏆 '+escS(pd.text):'';
+  const ev=(s.events||[]).slice(0,6);
+  $('wcgEvents').innerHTML=ev.length?ev.map(e=>{
+    const t=e.ts?new Date(e.ts*1000).toLocaleTimeString('en-GB'):'—';
+    return '<div class="wcg-evrow"><span class="wcg-evt">'+t+'</span><span>'
+      +escS(e.text)+'</span></div>';
+  }).join(''):'<div class="rowline"><span class="k">quiet wire — no game events yet</span></div>';
+}
+
+/* ---------- loader ---------- */
+async function wcgLoad(){
+  try{
+    const r=await fetch(STATE_URL+'?t='+Date.now(),{cache:'no-store'});
+    if(!r.ok) throw new Error('http '+r.status);
+    const s=await r.json();
+    window.WCG.state=s;
+    /* whitelist copy for the chart markers — liq never crosses over */
+    window.WCG.positions=(s.open_positions||[]).map(p=>({
+      user:p.user,side:p.side,coin:p.coin||'LTC',lev:p.lev,
+      entry:Number(p.entry)}));
+    wcgRenderArmy(s); wcgRenderBooks(s); wcgRenderPanel(); wcgRenderWire(s);
+    const ts=s.price_ts?new Date(s.price_ts*1000):null;
+    $('wcgAge').textContent='game state '+(ts
+      ?'read '+ts.toLocaleTimeString('en-GB'):'live')
+      +' · relayed from the game’s books';
+    try{ if(typeof charts!=='undefined') charts.forEach(requestDraw); }catch(e){}
+  }catch(e){
+    $('wcgAge').textContent='game feed holding its last state — the market layer above is unaffected';
+  }
+}
+wcgLoad();
+setInterval(wcgLoad,20000);
+})();
+
 </script>
 </body>
 </html>
