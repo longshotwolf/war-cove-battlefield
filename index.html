@@ -329,6 +329,85 @@ select#gLevSel{background:var(--panel2);color:var(--ink);border:1px solid var(--
 </style>
 
 </style>
+<script>
+/* War Cove - Discord Activity shim (added 2026-11-11). Active ONLY when
+   this page runs inside Discord (host ends .discordsays.com), where the
+   Discord proxy blocks every external origin that is not URL-mapped.
+   Rewrites the page's external calls onto the app's mapped prefixes:
+     /okx-api      -> https://www.okx.com/api/v5
+     /okx-ws       -> wss://ws.okx.com:8443/ws/v5/public
+     /board        -> https://longshotwolf.github.io/war-cove-board
+     /presence-api -> the rotating presence counter endpoint (*.lhr.life)
+   Same-origin relative fetches stay untouched. On the open web this
+   script is a complete no-op. */
+(function(){
+  try{
+    var h = location.hostname || '';
+    if (!h.endsWith('.discordsays.com')) return;
+    var OKX_REST = 'https://www.okx.com/api/v5';
+    var OKX_WS = 'wss://ws.okx.com:8443/ws/v5/public';
+    var BOARD = 'https://longshotwolf.github.io/war-cove-board';
+    function rewriteUrl(u){
+      if (typeof u !== 'string') return u;
+      if (u.indexOf(OKX_REST) === 0) return '/okx-api' + u.slice(OKX_REST.length);
+      if (u.indexOf(BOARD + '/') === 0) return '/board' + u.slice(BOARD.length);
+      var m = u.match(/^https:\/\/[^\/]+\.lhr\.life(\/.*)?$/);
+      if (m) return '/presence-api' + (m[1] || '/');
+      return u;
+    }
+    var origFetch = window.fetch;
+    if (origFetch) {
+      window.fetch = function(input, init){
+        try{
+          if (typeof input === 'string') {
+            input = rewriteUrl(input);
+          } else if (typeof URL !== 'undefined' && input instanceof URL) {
+            input = rewriteUrl(input.href);
+          } else if (typeof Request !== 'undefined' && input instanceof Request) {
+            var nu = rewriteUrl(input.url);
+            if (nu !== input.url) input = new Request(nu, input);
+          }
+        }catch(e){}
+        return origFetch.call(this, input, init);
+      };
+    }
+    var OrigWS = window.WebSocket;
+    if (OrigWS) {
+      var WrappedWS = function(url, protocols){
+        try{
+          if (typeof url === 'string' && url.indexOf(OKX_WS) === 0) {
+            url = 'wss://' + location.host + '/okx-ws' + url.slice(OKX_WS.length);
+          }
+        }catch(e){}
+        return protocols !== undefined ? new OrigWS(url, protocols) : new OrigWS(url);
+      };
+      WrappedWS.prototype = OrigWS.prototype;
+      ['CONNECTING','OPEN','CLOSING','CLOSED'].forEach(function(k){
+        try{ WrappedWS[k] = OrigWS[k]; }catch(e){}
+      });
+      window.WebSocket = WrappedWS;
+    }
+  }catch(e){}
+})();
+</script>
+<script type="module">
+/* War Cove - Discord Embedded App SDK boot (added 2026-11-11). Runs ONLY
+   inside Discord (host ends .discordsays.com); on the open web it exits
+   before importing anything. ready() only - no auth flow. Any failure is
+   swallowed so the page can never break. SDK vendored locally as
+   discord-embedded-app-sdk.js (@discord/embedded-app-sdk 2.5.0, the
+   jsDelivr bundled ESM build of output/index.mjs). */
+(async function(){
+  try{
+    var h = location.hostname || '';
+    if (!h.endsWith('.discordsays.com')) return;
+    var mod = await import('./discord-embedded-app-sdk.js');
+    var sdk = new mod.DiscordSDK('1570198856191320224');
+    window.__wcDiscordSDK = sdk;
+    await sdk.ready();
+  }catch(e){}
+})();
+</script>
 </head>
 <body>
 <div class="wc-frame" aria-hidden="true"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i></div>
