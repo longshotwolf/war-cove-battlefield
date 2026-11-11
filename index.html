@@ -563,7 +563,7 @@ select#gLevSel{background:var(--panel2);color:var(--ink);border:1px solid var(--
           <button type="button" class="long" id="gBtnLong">🟢 LONG</button>
           <button type="button" class="short" id="gBtnShort">🔴 SHORT</button>
         </div>
-        <div class="g-note">Buttons arm your call — tap LONG or SHORT and the Warlord's Kick channel opens in a new tab with your command ready to copy. A trade only counts when it lands in the chat. One long and one short at a time, on different coins; <span class="g-cmd">!close</span> names the side to bank it.</div>
+        <div class="g-note">Buttons arm your call — tap LONG or SHORT and the Warlord's Kick channel opens in a new tab with your command ready to copy. A trade only counts when it lands in the chat. One long AND one short on every coin — LTC, BTC and ETH, both sides of the same coin included — up to six trades at once; <span class="g-cmd">!close</span> names the coin and/or side to bank one.</div>
         <div class="g-cmdout" id="gCmdOut">
           <div class="g-cmdtxt" id="gCmdText">!long LTC 25x</div>
           <button type="button" class="gbtn" id="gCopyBtn" style="margin-top:9px; padding:9px 20px; font-size:14px;">📋 COPY COMMAND</button>
@@ -1419,7 +1419,10 @@ $('gSoundBtn').addEventListener('click', function(ev){
 });
 gSoundUi();
 
-/* ================= positions — one normal shape, 0/1/2 per player ======
+/* ================= positions — one normal shape, 0-6 per player ======
+   (v6 six-position rule, Nov 11, 2026: one long + one short per coin,
+   both sides of the same coin included — the flat relay list carries
+   every position, so nothing here counts slots per player.)
    Accepts every schema the relay/engine has used or is moving to:
    - state.open_positions: [pos, ...]                     (live relay)
    - state.open_positions / state.positions: {user: pos}  (single slot)
@@ -1645,7 +1648,7 @@ function gRenderBalance(){
         + ' · uPnL <span class="'
         + (p.upnl == null ? '' : gCls(p.upnl)) + '">'
         + (p.upnl == null ? '—' : gFmtSats(p.upnl)) + '</span>'
-        + ' — type <span class="g-cmd">!close ' + p.side + '</span> in chat to bank it';
+        + ' — type <span class="g-cmd">!close ' + p.side + ' ' + p.coin + '</span> in chat to bank it';
     }).join('<br>');
   }else{
     posEl.innerHTML = 'No open position — arm a call below and paste it in the chat.';
