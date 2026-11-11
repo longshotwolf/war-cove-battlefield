@@ -165,9 +165,9 @@
 </section>
 
 <section class="btools" id="btools">
-  <h2>BTC BATTLEFIELD — NEWHEDGE BOARD <span class="badge ok" id="btBadge">CERTIFIED</span></h2>
+  <h2>BTC BATTLEFIELD — WAR COVE ENGINE <span class="badge ok" id="btBadge">CERTIFIED</span></h2>
   <div style="margin-top:6px;font-size:13px;letter-spacing:1.2px">BOARD STATUS: <b id="btStatus">—</b></div>
-  <div class="bsub">Bitcoin board — the market-wide read, labeled BTC because its certified source is a Bitcoin board. Figures read off the same certified Newhedge battlefield source the Cove's battlefield watch uses, checked against the live Bitunix tape. <span class="age" id="btAge"></span></div>
+  <div class="bsub">Bitcoin board — the market-wide read, labeled BTC because its certified source is a Bitcoin board. Figures computed by the War Cove's own engine from public Bitunix + OKX exchange data, checked against the live Bitunix tape. <span class="age" id="btAge"></span></div>
 
   <div class="winbar">
     <div class="labels">
@@ -190,7 +190,7 @@
     </div>
 
     <div class="panel" id="pLiq">
-      <h3>LIQUIDITY — AGGREGATED SPOT</h3>
+      <h3>LIQUIDITY — AGGREGATED BOOK</h3>
       <div class="rowline"><span class="k">BID LIQUIDITY</span><span><b class="big" style="color:var(--green);font-size:21px" id="liqBid">—</b> <span class="delta" id="liqBidD" style="display:none"></span></span></div>
       <div class="rowline"><span class="k">ASK LIQUIDITY</span><span><b class="big" style="color:var(--red);font-size:21px" id="liqAsk">—</b> <span class="delta" id="liqAskD" style="display:none"></span></span></div>
       <div class="splitbar"><div class="b" id="liqBarG" style="width:50%"></div><div class="a" id="liqBarR" style="width:50%"></div></div>
@@ -203,7 +203,7 @@
     </div>
 
     <div class="panel" id="pDepth">
-      <h3>ORDER BOOK DEPTH — AGGREGATED SPOT</h3>
+      <h3>ORDER BOOK DEPTH — AGGREGATED BOOK</h3>
       <canvas class="depth" id="depthCv" height="190"></canvas>
       <div class="age">cumulative bid (green) vs ask (red) $ by price · wall prices marked</div>
     </div>
@@ -212,7 +212,7 @@
       <h3>LIQUIDATION CLUSTERS — BTC</h3>
       <div class="rowline"><span class="k">Liquidations (tracker total)</span><b id="liqTotal">—</b></div>
       <div id="clusterList"></div>
-      <div class="age" id="clusterAge">nearest recent liquidation print clusters · OKX + Binance lanes</div>
+      <div class="age" id="clusterAge">nearest recent liquidation print clusters · OKX prints</div>
     </div>
 
     <div class="panel" id="pFeed" style="grid-column:1/-1">
@@ -228,8 +228,8 @@
 <footer>
   Flank candles: OKX live tape, Heikin-Ashi only — drag to pan history, wheel / pinch to zoom, drag the price axis to stretch, double-click or ⟲ LIVE VIEW to snap back.
   Funding &amp; open interest: OKX. LTC battlefield: live OKX LTC/USDT spot book (books stream, sequence-checked, REST resync each minute) + the LTC 6H tape range — walls build and pull in real time.
-  BTC board: Newhedge public battlefield (the Cove watch's certified source) via the War Cove collector — every read is checked against the Bitunix tape; a mismatch or a dead feed shows STALE, never a made-up number. BTC figures are never dressed as LTC.
-  <br>Page build BFBUILD v3 · Nov 10, 2026 — LTC-first rebuild.
+  BTC board: the War Cove's OWN engine — computed on this box from public Bitunix + OKX exchange data (aggregated order books, trades, liquidation prints), no borrowed board, no login. Every read is checked against the Bitunix tape; a mismatch or a dead feed shows STALE, never a made-up number. BTC figures are never dressed as LTC.
+  <br>Page build BFBUILD v4 · Nov 10, 2026 — LTC-first, own-engine BTC board.
 </footer>
 
 <script>
@@ -726,7 +726,7 @@ function renderBT(){
   $('armyBearsWin').textContent=army.bears_to_win!=null?fmt$(army.bears_to_win):'—';
   const holder=army.holder;
   $('armyHolder').innerHTML=holder?('<span style="color:var(--'+(holder==='GREEN'?'green':holder==='RED'?'red':'gold')+')">'+esc(holder)+(holder==='DEAD HEAT'?'':' ARMY')+'</span>'):'—';
-  $('armyAge').textContent='win race from the Cove watch snapshot · '+(armyAge!=null?ageStr(Date.now()-armyAge*1000):'—')+(army.stale?' · STALE':'');
+  $('armyAge').textContent='win race from the War Cove engine · '+(armyAge!=null?ageStr(Date.now()-armyAge*1000):'—')+(army.stale?' · STALE':'');
   /* liquidity */
   const L=d.liquidity||{};
   $('liqBid').textContent=fmt$(L.bid_usd); $('liqAsk').textContent=fmt$(L.ask_usd);
@@ -750,7 +750,7 @@ function renderBT(){
   $('clusterList').innerHTML=cl.length?cl.map(c=>
     '<div class="rowline"><span><span class="tag '+(c.side==='longs'?'short':'long')+'">'+(c.side==='longs'?'LONGS LIQ':'SHORTS LIQ')+'</span> $'+fmtP(c.price)+' <span style="color:var(--dim)">('+(c.dist_pct>=0?'+':'')+c.dist_pct+'%)</span></span><b>'+fmt$(c.usd)+' · '+c.count+' prints</b></div>').join('')
     :'<div class="rowline"><span class="k">No liquidation clusters in the current print window</span></div>';
-  $('clusterAge').textContent='OKX lane '+(liq.okx_lane?'live':'OFFLINE')+' · Binance lane '+(liq.binance_lane?'live':'OFFLINE')
+  $('clusterAge').textContent='OKX prints lane '+(liq.okx_lane?'live':'OFFLINE')+' · OKX trades lane '+(liq.binance_lane?'live':'OFFLINE')
     +(liq.source?' · tracker: '+esc(liq.source):'');
   /* market feed */
   const feed=d.feed||[];
@@ -768,7 +768,7 @@ function renderBT(){
   if(liqLaneOff) html='<div class="offline">LIQUIDATIONS — FEED OFFLINE (both print lanes down)</div>'+html;
   if(!feed.length&&!liqLaneOff) html='<div class="offline">FEED — NO EVENTS IN THE CURRENT READ</div>';
   $('feedList').innerHTML=html;
-  $('feedAge').textContent='lanes: Newhedge BTC tape (large trades / options) · OKX BTC + LTC liquidation prints · Binance BTC liquidation stream · source read '+(srcTs?ageStr(srcTs):'—');
+  $('feedAge').textContent='lanes: OKX large trades · OKX BTC + LTC liquidation prints · War Cove engine — public exchange data only · source read '+(srcTs?ageStr(srcTs):'—');
   if(d.read) $('btRead').innerHTML=d.read;
 }
 function drawDepth(d){
