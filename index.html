@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<!-- BFBUILD 2026-11-10 v2 full-motion + LTC live book + Newhedge BTC board -->
+<!-- BFBUILD 2026-11-10 v3 — LTC-first rebuild: true 24H change, board status line, LTC headline price -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>War Cove Battlefield — Live HA Flanks + BTC Battlefield Tools</title>
+<title>War Cove Battlefield — Ł LITECOIN Leads · Live Heikin-Ashi + Battlefield Tools</title>
 <style>
   :root{
     --gold:#e8c15a; --green:#37d67a; --red:#ff5252; --amber:#ffb02e;
@@ -116,7 +116,7 @@
 <header>
   <h1>⚔ WAR COVE BATTLEFIELD</h1>
   <span class="live"><span class="dot"></span>LIVE</span>
-  <span class="sub">two live Heikin-Ashi flanks in full motion — candles adjust as the tape moves · LTC leads below with its live book and 6H win bar · BTC board under it, certified against the Bitunix tape</span>
+  <span class="sub">LITECOIN headlines this page — live Heikin-Ashi in full motion, the forming candle moves on every tick · LTC live book and 6H battle range below · BTC board under it, certified against the Bitunix tape</span>
   <span style="flex:1"></span>
   <button id="refreshBtn">↻ REFRESH</button>
 </header>
@@ -128,6 +128,7 @@
 
 <section class="ltools" id="ltools">
   <h2>Ł LTC BATTLEFIELD — LIVE BOOK <span class="live" style="margin-left:6px"><span class="dot"></span>LIVE</span></h2>
+  <div style="margin-top:4px"><span id="ltcPx" style="font-size:27px;font-weight:bold;font-variant-numeric:tabular-nums">—</span> <span class="chg" id="ltcChg"></span></div>
   <div class="bsub">Litecoin — the home coin leads this page. The win bar rides the live LTC 6H battle range (OKX tape); walls, liquidity and depth run off the live OKX LTC/USDT spot book, updating as orders stack and pull — resistance shows itself BEFORE price gets there. <span class="age" id="ltcAge"></span></div>
 
   <div class="winbar">
@@ -165,6 +166,7 @@
 
 <section class="btools" id="btools">
   <h2>BTC BATTLEFIELD — NEWHEDGE BOARD <span class="badge ok" id="btBadge">CERTIFIED</span></h2>
+  <div style="margin-top:6px;font-size:13px;letter-spacing:1.2px">BOARD STATUS: <b id="btStatus">—</b></div>
   <div class="bsub">Bitcoin board — the market-wide read, labeled BTC because its certified source is a Bitcoin board. Figures read off the same certified Newhedge battlefield source the Cove's battlefield watch uses, checked against the live Bitunix tape. <span class="age" id="btAge"></span></div>
 
   <div class="winbar">
@@ -227,6 +229,7 @@
   Flank candles: OKX live tape, Heikin-Ashi only — drag to pan history, wheel / pinch to zoom, drag the price axis to stretch, double-click or ⟲ LIVE VIEW to snap back.
   Funding &amp; open interest: OKX. LTC battlefield: live OKX LTC/USDT spot book (books stream, sequence-checked, REST resync each minute) + the LTC 6H tape range — walls build and pull in real time.
   BTC board: Newhedge public battlefield (the Cove watch's certified source) via the War Cove collector — every read is checked against the Bitunix tape; a mismatch or a dead feed shows STALE, never a made-up number. BTC figures are never dressed as LTC.
+  <br>Page build BFBUILD v3 · Nov 10, 2026 — LTC-first rebuild.
 </footer>
 
 <script>
@@ -274,13 +277,13 @@ function connectWS(){
     const arg=m.arg;
     if(arg.channel==='books'&&arg.instId==='LTC-USDT'){ bookMessage(m); return; }
     if(arg.instId==='LTC-USDT'&&arg.channel==='tickers'){ const t=m.data[0];
-      if(t&&t.last){ ltcTape.price=parseFloat(t.last); ltcDirty=true; } }
+      if(t&&t.last){ ltcTape.price=parseFloat(t.last); if(t.open24h)ltcTape.open24h=parseFloat(t.open24h); ltcDirty=true; } }
     if(arg.instId==='LTC-USDT'&&arg.channel==='candle6H'){ const row=m.data[0];
       if(row){ ltcTape.hi6=parseFloat(row[2]); ltcTape.lo6=parseFloat(row[3]); ltcDirty=true; } }
     for(const ch of charts){
       if(arg.instId!==ch.inst) continue;
       if(arg.channel==='tickers'){ const t=m.data[0];
-        if(t&&t.last){ ch.price=parseFloat(t.last); applyTick(ch); } }
+        if(t&&t.last){ ch.price=parseFloat(t.last); if(t.open24h)ch.open24h=parseFloat(t.open24h); applyTick(ch); } }
       else if(arg.channel==='candle'+ch.bar){ for(const row of m.data) upsertCandle(ch,row); requestDraw(ch); }
     } };
   ws.onclose=()=>{ setTimeout(connectWS,wsRetry); wsRetry=Math.min(wsRetry*2,15000); };
@@ -318,6 +321,12 @@ async function loadHistory(ch,more){
     if(first) ch.prevClose=first[4];
     requestDraw(ch);
   }catch(e){}
+}
+async function fetchTicker(ch){
+  try{ const r=await fetch(REST+'/market/tickers?instId='+ch.inst); const j=await r.json();
+    const t=j.data&&j.data[0];
+    if(t){ if(t.last){ ch.price=parseFloat(t.last); applyTick(ch); }
+      if(t.open24h) ch.open24h=parseFloat(t.open24h); requestDraw(ch); } }catch(e){}
 }
 async function fetchStats(ch){
   try{ const r=await fetch(REST+'/public/funding-rate?instId='+ch.inst);
@@ -362,9 +371,9 @@ function requestDraw(ch){ ch.dirty=true; if(ch.liveBtn) ch.liveBtn.classList.tog
 function switchCoin(ch,coin){
   const old=ch.inst;
   unsub('tickers',old); unsub('candle'+ch.bar,old);
-  ch.inst=coin+'-USDT'; ch.raw=[]; ch.ha=[]; ch.price=null; snapLive(ch);
+  ch.inst=coin+'-USDT'; ch.raw=[]; ch.ha=[]; ch.price=null; ch.open24h=null; snapLive(ch);
   sub('tickers',ch.inst); sub('candle'+ch.bar,ch.inst);
-  loadHistory(ch,false); fetchStats(ch);
+  loadHistory(ch,false); fetchStats(ch); fetchTicker(ch);
 }
 function switchBar(ch,bar){
   unsub('candle'+ch.bar,ch.inst);
@@ -465,8 +474,8 @@ function drawChart(ch){
     +(army?'<span class="'+(army==='GREEN'?'g':'r')+'">● '+army+' ARMY</span>':'');
   ch.root.querySelector('.price').textContent=ch.price?'$'+fmtP(ch.price):'—';
   const chgEl=ch.root.querySelector('.chg');
-  if(ch.price&&ch.prevClose){ const pc=(ch.price-ch.prevClose)/ch.prevClose*100;
-    chgEl.textContent=(pc>=0?'+':'')+pc.toFixed(2)+'%'; chgEl.className='chg '+(pc>=0?'up':'down'); }
+  if(ch.price&&ch.open24h){ const pc=(ch.price-ch.open24h)/ch.open24h*100;
+    chgEl.textContent=(pc>=0?'+':'')+pc.toFixed(2)+'% · 24H'; chgEl.className='chg '+(pc>=0?'up':'down'); }
   let hi=-Infinity,lo=Infinity; for(const c of vis){ if(c[2]>hi)hi=c[2]; if(c[3]<lo)lo=c[3]; }
   ch.root.querySelector('.rh').textContent='$'+fmtP(hi);
   ch.root.querySelector('.rl').textContent='$'+fmtP(lo);
@@ -490,7 +499,7 @@ charts.push(makeChart('flankL','LTC-USDT'));
 charts.push(makeChart('flankR','ETH-USDT'));
 charts.forEach(ch=>{ sub('tickers',ch.inst); sub('candle'+ch.bar,ch.inst); });
 connectWS();
-charts.forEach(ch=>{ loadHistory(ch,false); fetchStats(ch); });
+charts.forEach(ch=>{ loadHistory(ch,false); fetchStats(ch); fetchTicker(ch); });
 setInterval(()=>charts.forEach(fetchStats),30000);
 (function loop(){ for(const ch of charts){ if(ch.dirty||ch.back===0){ drawChart(ch); ch.dirty=false; } }
   requestAnimationFrame(loop); })();
@@ -564,6 +573,10 @@ function sample60(){
 }
 function renderLTC(){
   const px=ltcTape.price;
+  if(px){ $('ltcPx').textContent='$'+fmtP(px);
+    if(ltcTape.open24h){ const pc=(px-ltcTape.open24h)/ltcTape.open24h*100;
+      const ce=$('ltcChg'); ce.textContent=(pc>=0?'+':'')+pc.toFixed(2)+'% · 24H';
+      ce.className='chg '+(pc>=0?'up':'down'); } }
   if(px&&ltcTape.hi6&&ltcTape.lo6&&ltcTape.hi6>ltcTape.lo6){
     const prog=Math.max(0,Math.min(100,(px-ltcTape.lo6)/(ltcTape.hi6-ltcTape.lo6)*100));
     $('lwbBears').textContent='$'+fmtP(ltcTape.lo6);
@@ -687,6 +700,7 @@ function renderBT(){
   const badge=$('btBadge');
   badge.className='badge '+(stale?'stale':'ok');
   badge.textContent=stale?'STALE':'CERTIFIED ✓';
+  $('btStatus').textContent=(d.status?String(d.status).toUpperCase():'—')+(stale?' · LAST CERTIFIED READ HELD':'' );
   $('btAge').textContent='source read '+(srcTs?ageStr(srcTs):'—')
     +(d.diff_pct!=null?' · page vs Bitunix tape diff '+d.diff_pct+'%':'')
     +(stale&&d.stale_reason?' · '+d.stale_reason:'')
@@ -764,7 +778,7 @@ function drawDepth(d){
   drawDepthInto($('depthCv'), dep.bids||[], dep.asks||[], dep.mid||d.nh_price, bw, aw);
 }
 $('refreshBtn').addEventListener('click',()=>{
-  charts.forEach(ch=>{ loadHistory(ch,false); fetchStats(ch); });
+  charts.forEach(ch=>{ loadHistory(ch,false); fetchStats(ch); fetchTicker(ch); });
   loadBattlefield(true); });
 loadBattlefield(false);
 setInterval(()=>loadBattlefield(false),30000);
